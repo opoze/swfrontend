@@ -36,7 +36,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.proposalService.updateUser(this.proposal)
+    this.proposalService.updateProposal(this.proposal)
       .subscribe(() => this.goBack());
   }
 }

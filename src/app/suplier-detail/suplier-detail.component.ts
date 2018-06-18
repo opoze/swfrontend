@@ -36,7 +36,7 @@ export class SuplierDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.suplierService.updateUser(this.suplier)
+    this.suplierService.updateSuplier(this.suplier)
       .subscribe(() => this.goBack());
   }
 }

@@ -7,21 +7,61 @@ import { UserService } from '../user.service';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
+
 export class UsersComponent implements OnInit {
 
   users: User[];
+  loading: bool;
+  selectedUser: User;
+  seletedUserId: integer;
 
   constructor(
     private userService: UserService
   ) { }
 
   ngOnInit() {
+    this.loading = false;
+    this.edit = 0;
+    this.selectedUser = null;
+    this.selectedUserId = 0;
     this.getUsers();
   }
 
   getUsers(): void {
+    this.loading = true;
     this.userService.getUsers()
-      .subscribe(users => this.users = users);
+      .subscribe(users => {
+        this.users = users;
+        this.loading = false;
+      });
+  }
+
+  setUser(user:User): void {
+    this.selectedUser = { ...user };
+    this.selectedUserId = user.id;
+  }
+
+  unsetUser(): void {
+    this.selectedUser = null;
+    this.selectedUserId = 0;
+  }
+
+  removeUSer(): void {
+
+  }
+
+  saveUser(): void {
+   this.userService.updateUser(this.selectedUser)
+     .subscribe(() => {
+      this.users = this.users.map(
+        item => {
+          return item.id == this.selectedUserId ? this.selectedUser : item;
+        }
+      );
+      this.unsetUser();
+    });
+
+
   }
 
 }

@@ -1,3 +1,63 @@
-<p>
-  users works!
-</p>
+<div *ngIf="loading">
+  <h2>LOADING...</h2>
+</div>
+
+<div *ngIf="users">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Data de nascimento</th>
+        <th>perfil</th>
+        <th>Opções</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        
+
+        <td *ngIf="selectedUserId!=user.id">{{user.name}}</td>
+        <td *ngIf="selectedUserId!=user.id">{{user.cpf}}</td>
+        <td *ngIf="selectedUserId!=user.id">{{user.birth_date}}</td>
+        <td *ngIf="selectedUserId!=user.id">{{user.perfil}}</td>
+        
+        <td *ngIf="selectedUserId==user.id">
+          <input class="form-control" [(ngModel)]="selectedUser.name" placeholder="Nome">
+        </td>
+        <td *ngIf="selectedUserId==user.id">
+          <input class="form-control" [(ngModel)]="selectedUser.cpf" placeholder="CPF">
+        </td>
+        <td *ngIf="selectedUserId==user.id">
+          <input class="form-control" [(ngModel)]="selectedUser.birth_date" placeholder="Data de Nascimento">
+        </td>
+        <td *ngIf="selectedUserId==user.id">
+          <input class="form-control" [(ngModel)]="selectedUser.perfil" placeholder="Perfil">
+        </td>
+        
+
+        <td *ngIf="selectedUserId!=user.id">
+          <button type="button" class="btn btn-default" aria-label="Left Align" (click)="setUser(user)">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default" aria-label="Left Align" (click)="removeUser()">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+        </td>
+
+
+
+        <td *ngIf="selectedUserId==user.id">
+          <button type="button" class="btn btn-default" aria-label="Left Align" (click)="saveUser(user)">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+          <button type="button" class="btn btn-default" aria-label="Left Align" (click)="unsetUser(user)">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+          </button>
+        </td>
+
+
+      </tr>
+    </tbody>
+  </table>
+</div>

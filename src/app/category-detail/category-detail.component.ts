@@ -36,7 +36,7 @@ export class CategoryDetailComponent implements OnInit {
   }
 
   save(): void {
-    this.categoryService.updateUser(this.category)
+    this.categoryService.updateCategory(this.category)
       .subscribe(() => this.goBack());
   }
 }

@@ -9,7 +9,7 @@ import { SuplierService } from '../suplier.service';
 })
 export class SupliersComponent implements OnInit {
 
-  supliers: Supliers[];
+  supliers: Suplier[];
 
   constructor(
     private suplierService: SuplierService

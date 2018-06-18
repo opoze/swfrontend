@@ -4,17 +4,18 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { User } from './user';
 import { Observable, of } from 'rxjs';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+  
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserService {
 
-  private usersUrl = 'http://localhost:8000/users';
+  private usersUrl = 'http://erp/user';
 
-  const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
   constructor(
     private http: HttpClient
@@ -23,7 +24,7 @@ export class UserService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.usersUrl)
     .pipe(
-      tap(heroes => this.log(`fetched heroes`)),
+      tap(heroes => this.log(`fetched users`)),
       catchError(this.handleError('getUSers', []))
     );
   }
@@ -37,7 +38,9 @@ export class UserService {
   }
 
   updateUser (user: User): Observable<any> {
-    return this.http.put(this.usersUrl, user, httpOptions).pipe(
+    console.log(user);
+    const url = `${this.usersUrl}/${user.id}`;
+    return this.http.post(url, user, httpOptions).pipe(
       tap(_ => this.log(`updated user id=${user.id}`)),
       catchError(this.handleError<any>('updateUser'))
     );

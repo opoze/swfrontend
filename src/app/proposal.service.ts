@@ -4,6 +4,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Proposal } from './proposal';
 import { Observable, of } from 'rxjs';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -12,9 +16,6 @@ export class ProposalService {
 
   private proposalsUrl = 'http://localhost:8000/proposals';
 
-  const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
   constructor(
     private http: HttpClient

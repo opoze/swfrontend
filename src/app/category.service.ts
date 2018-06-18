@@ -4,23 +4,25 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Category } from './category';
 import { Observable, of } from 'rxjs';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+
+
 @Injectable({
   providedIn: 'root'
 })
+
 
 export class CategoryService {
 
   private categoriesUrl = 'http://localhost:8000/categories';
 
-  const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
-
   constructor(
     private http: HttpClient
   ) { }
 
-  getCaregories(): Observable<Category[]> {
+  getCategories(): Observable<Category[]> {
     return this.http.get<Category[]>(this.categoriesUrl)
     .pipe(
       tap(categories => this.log(`fetched categories`)),
@@ -28,7 +30,7 @@ export class CategoryService {
     );
   }
 
-  getCategories(id: number): Observable<Category> {
+  getCategory(id: number): Observable<Category> {
     const url = `${this.categoriesUrl}/${id}`;
     return this.http.get<Category>(url).pipe(
       tap(_ => this.log(`fetched category id=${id}`)),

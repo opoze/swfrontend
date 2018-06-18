@@ -4,6 +4,10 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Suplier } from './suplier';
 import { Observable, of } from 'rxjs';
 
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
+  
 @Injectable({
   providedIn: 'root'
 })
@@ -12,9 +16,6 @@ export class SuplierService {
 
   private supliersUrl = 'http://localhost:8000/supliers';
 
-  const httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
 
   constructor(
     private http: HttpClient
