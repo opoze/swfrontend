@@ -1,0 +1,20 @@
+<div *ngIf="user">
+  <h2>Detelhes: {{ user.name | uppercase }}</h2>
+  <div><span>id: </span>{{user.id}}</div>
+  <div>
+    <label>name:</label>
+    <input [(ngModel)]="user.name" placeholder="Nome">
+
+    <label>CPF:</label>
+    <input [(ngModel)]="user.cpf" placeholder="CPF">
+
+    <label>Data de Nascimento:</label>
+    <input [(ngModel)]="user.birth_date" placeholder="Data de Nascimento">
+
+    <label>Perfil:</label>
+    <input [(ngModel)]="user.perfil" placeholder="Perfil">
+
+    <button (click)="save()">Salvar</button>
+  </div>
+  <button (click)="goBack()">Voltar</button>
+</div>
