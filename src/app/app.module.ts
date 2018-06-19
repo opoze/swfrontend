@@ -14,6 +14,7 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
 import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
 import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
 import { MessagesComponent } from './messages/messages.component';
+import { CpfPipePipe } from './cpf-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MessagesComponent } from './messages/messages.component';
     CategoryDetailComponent,
     ProposalDetailComponent,
     SuplierDetailComponent,
-    MessagesComponent
+    MessagesComponent,
+    CpfPipePipe
   ],
   imports: [
     BrowserModule,

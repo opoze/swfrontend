@@ -15,7 +15,8 @@ const httpOptions = {
 
 export class UserService {
 
-  private usersUrl = 'http://127.0.0.1:8000/user';
+  private usersUrl = 'http://erp/user';
+  public httpError = false;
 
   constructor(
     private http: HttpClient,
@@ -23,26 +24,38 @@ export class UserService {
   ) { }
 
   getUsers(): Observable<User[]> {
+    this.httpError = false;
     return this.http.get<User[]>(this.usersUrl)
     .pipe(
-      tap(heroes => this.log(`fetched users`)),
+      tap(
+        data => this.log(`fetched users`),
+        error => this.httpError = true
+      ),
       catchError(this.handleError('getUSers', []))
     );
   }
 
   getUser(id: number): Observable<User> {
+    this.httpError = false;
     const url = `${this.usersUrl}/${id}`;
     return this.http.get<User>(url).pipe(
-      tap(_ => this.log(`fetched user id=${id}`)),
+      tap(
+        data => this.log(`fetched user id=${id}`),
+        error => this.httpError = true
+      ),
       catchError(this.handleError<User>(`getUser id=${id}`))
     );
   }
 
   updateUser (user: User): Observable<any> {
+    this.httpError = false;
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.usersUrl}/${user.id}`;
     return this.http.post<User>(url, user, {headers: headers}).pipe(
-      tap(_ => this.log(`updated user id=${user.id}`)),
+      tap(
+        data => this.log(`updated user id=${user.id}`),
+        error => this.httpError = true
+      ),
       catchError(this.handleError<any>('Atualizar usuário'))
     );
   }

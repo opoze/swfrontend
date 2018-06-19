@@ -19,6 +19,17 @@ export class UsersComponent implements OnInit {
     private userService: UserService
   ) { }
 
+  ngOnChanges(changes: SimpleChanges) {
+    for (let propName in changes) {
+      // let chng = changes[propName];
+      // let cur  = JSON.stringify(chng.currentValue);
+      // let prev = JSON.stringify(chng.previousValue);
+      // this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
+      console.log(propName);
+    }
+  }
+
+
   ngOnInit() {
     this.loading = false;
     this.selectedUser = null;
@@ -46,21 +57,20 @@ export class UsersComponent implements OnInit {
   }
 
   removeUSer(): void {
-
   }
 
   saveUser(): void {
     this.userService.updateUser(this.selectedUser)
       .subscribe(() => {
-        this.users = this.users.map(
-          item => {
-            return item.id == this.selectedUserId ? this.selectedUser : item;
-          }
-        );
+        if(!this.userService.httpError){
+          this.users = this.users.map(
+            item => {
+              return item.id == this.selectedUserId ? this.selectedUser : item;
+            }
+          );
+        }
         this.unsetUser();
     });
-
-
   }
 
 }

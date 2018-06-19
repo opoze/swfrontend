@@ -20,21 +20,61 @@
 
 
         <td *ngIf="selectedUserId!=user.id">{{user.name}}</td>
-        <td *ngIf="selectedUserId!=user.id">{{user.cpf}}</td>
+        <td *ngIf="selectedUserId!=user.id">{{user.cpf | cpfPipe}}</td>
         <td *ngIf="selectedUserId!=user.id">{{user.birth_date}}</td>
         <td *ngIf="selectedUserId!=user.id">{{user.perfil}}</td>
 
         <td *ngIf="selectedUserId==user.id">
-          <input class="form-control" [(ngModel)]="selectedUser.name" placeholder="Nome">
+          
+          <input
+            class="form-control"
+            [(ngModel)]="selectedUser.name"
+            placeholder="Nome"
+            required
+            minlength="4"
+            #name="ngModel"
+            id="name"
+            name="name"
+          >
+          <div *ngIf="selectedUser.name.invalid && (selectedUser.name.dirty || selectedUser.name.touched)" class="alert alert-danger">
+            <div *ngIf="selectedUser.name.errors.required">
+              Nome deve ser informado
+            </div>
+            <div *ngIf="selectedUser.name.errors.minlength">
+              Nome deve ter no mínimo 4 caracteres.
+            </div>
+          </div>
+        
+        </td>
+
+
+
+
+        <td *ngIf="selectedUserId==user.id">
+          <input
+            class="form-control"
+            [(ngModel)]="selectedUser.cpf | cpfPipe"
+            placeholder="CPF"
+            required minlength="4"
+            (ngModelChange)=""
+
+          >
         </td>
         <td *ngIf="selectedUserId==user.id">
-          <input class="form-control" [(ngModel)]="selectedUser.cpf" placeholder="CPF">
+          <input
+            class="form-control"
+            [(ngModel)]="selectedUser.birth_date"
+            placeholder="Data de Nascimento"
+            required minlength="4"
+          >
         </td>
         <td *ngIf="selectedUserId==user.id">
-          <input class="form-control" [(ngModel)]="selectedUser.birth_date" placeholder="Data de Nascimento">
-        </td>
-        <td *ngIf="selectedUserId==user.id">
-          <input class="form-control" [(ngModel)]="selectedUser.perfil" placeholder="Perfil">
+          <input
+            class="form-control"
+            [(ngModel)]="selectedUser.perfil"
+            placeholder="Perfil"
+            required minlength="4"
+          >
         </td>
 
 
