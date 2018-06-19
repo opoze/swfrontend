@@ -7,14 +7,14 @@ import { Observable, of } from 'rxjs';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-  
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class UserService {
 
-  private usersUrl = 'http://erp/user';
+  private usersUrl = 'http://127.0.0.1:8000/user';
 
 
   constructor(
@@ -38,9 +38,11 @@ export class UserService {
   }
 
   updateUser (user: User): Observable<any> {
-    console.log(user);
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/json')
+
     const url = `${this.usersUrl}/${user.id}`;
-    return this.http.post(url, user, httpOptions).pipe(
+    return this.http.post<User>(url, user, {headers: headers}).pipe(
       tap(_ => this.log(`updated user id=${user.id}`)),
       catchError(this.handleError<any>('updateUser'))
     );

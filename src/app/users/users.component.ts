@@ -11,9 +11,9 @@ import { UserService } from '../user.service';
 export class UsersComponent implements OnInit {
 
   users: User[];
-  loading: bool;
+  loading: boolean;
   selectedUser: User;
-  seletedUserId: integer;
+  selectedUserId: number;
 
   constructor(
     private userService: UserService
@@ -21,7 +21,6 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.loading = false;
-    this.edit = 0;
     this.selectedUser = null;
     this.selectedUserId = 0;
     this.getUsers();
