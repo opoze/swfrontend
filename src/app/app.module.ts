@@ -13,6 +13,7 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
 import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { SuplierDetailComponent } from './suplier-detail/suplier-detail.componen
     UserDetailComponent,
     CategoryDetailComponent,
     ProposalDetailComponent,
-    SuplierDetailComponent
+    SuplierDetailComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,

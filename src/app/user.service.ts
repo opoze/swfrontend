@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import { User } from './user';
 import { Observable, of } from 'rxjs';
+import { MessageService } from './message.service';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,9 +17,9 @@ export class UserService {
 
   private usersUrl = 'http://127.0.0.1:8000/user';
 
-
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private messageService: MessageService
   ) { }
 
   getUsers(): Observable<User[]> {
@@ -38,13 +39,11 @@ export class UserService {
   }
 
   updateUser (user: User): Observable<any> {
-
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
-
     const url = `${this.usersUrl}/${user.id}`;
     return this.http.post<User>(url, user, {headers: headers}).pipe(
       tap(_ => this.log(`updated user id=${user.id}`)),
-      catchError(this.handleError<any>('updateUser'))
+      catchError(this.handleError<any>('Atualizar usuário'))
     );
   }
 
@@ -62,13 +61,28 @@ export class UserService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      this.validationErrors(error);
 
       // TODO: better job of transforming error for user consumption
       this.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
+
     };
   }
+
+  private validationErrors(error: any){
+    if(typeof error != 'undefined'){
+      if(typeof error.error != 'undefined'){
+        if(typeof error.error.errors != 'undefined'){
+          for(let i in error.error.errors){
+            // console.log(error.error.errors[i][0]));
+            this.messageService.add(error.error.errors[i][0], 'danger');
+          }
+        }
+      }
+    }
+  }
+  
 }

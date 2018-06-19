@@ -50,14 +50,14 @@ export class UsersComponent implements OnInit {
   }
 
   saveUser(): void {
-   this.userService.updateUser(this.selectedUser)
-     .subscribe(() => {
-      this.users = this.users.map(
-        item => {
-          return item.id == this.selectedUserId ? this.selectedUser : item;
-        }
-      );
-      this.unsetUser();
+    this.userService.updateUser(this.selectedUser)
+      .subscribe(() => {
+        this.users = this.users.map(
+          item => {
+            return item.id == this.selectedUserId ? this.selectedUser : item;
+          }
+        );
+        this.unsetUser();
     });
 
 

@@ -2,6 +2,8 @@
   <h2>LOADING...</h2>
 </div>
 
+<app-messages></app-messages>
+
 <div *ngIf="users">
   <table class="table table-striped table-hover">
     <thead>
@@ -15,13 +17,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        
+
 
         <td *ngIf="selectedUserId!=user.id">{{user.name}}</td>
         <td *ngIf="selectedUserId!=user.id">{{user.cpf}}</td>
         <td *ngIf="selectedUserId!=user.id">{{user.birth_date}}</td>
         <td *ngIf="selectedUserId!=user.id">{{user.perfil}}</td>
-        
+
         <td *ngIf="selectedUserId==user.id">
           <input class="form-control" [(ngModel)]="selectedUser.name" placeholder="Nome">
         </td>
@@ -34,7 +36,7 @@
         <td *ngIf="selectedUserId==user.id">
           <input class="form-control" [(ngModel)]="selectedUser.perfil" placeholder="Perfil">
         </td>
-        
+
 
         <td *ngIf="selectedUserId!=user.id">
           <button type="button" class="btn btn-default" aria-label="Left Align" (click)="setUser(user)">
