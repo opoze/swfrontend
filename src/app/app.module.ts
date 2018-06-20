@@ -17,6 +17,7 @@ import { MessagesComponent } from './messages/messages.component';
 import { CpfPipePipe } from './cpf-pipe.pipe';
 import { UserFormComponent } from './user-form/user-form.component';
 import { NgxMaskModule } from 'ngx-mask';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NgxMaskModule } from 'ngx-mask';
     SuplierDetailComponent,
     MessagesComponent,
     CpfPipePipe,
-    UserFormComponent
+    UserFormComponent,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,

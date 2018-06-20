@@ -1,64 +1,153 @@
-<div [hidden]="!showForm">
-  <form #userForm="ngForm" (ngSubmit)="onSubmit()">
-    <table class="table table-striped table-hover">
-      <tbody>
-        <td width="20%">
-          <div class="form-group">
-            <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel" placeholder="Nome">
-            <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-              Informe o Nome
+  
+<div *ngIf="!updateMode">
+  <div [hidden]="!showForm">
+    <form #userForm="ngForm" (ngSubmit)="updateUser(userForm)">
+      <table>
+        <tbody>
+          <td width="20%">
+            <div class="form-group">
+              <input type="text" minlength="4" maxlength="255" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel" placeholder="Nome">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">
+                    Informe um nome
+                  </div>
+                  <div *ngIf="name.errors.minlength">
+                    Nome deve conter no mínimo 4 caravteres
+                  </div>
+                  <div *ngIf="name.errors.maxlength">
+                    nome deve ter no máximo 255 caracteres
+                  </div>
+                </div>
             </div>
-          </div>
-        </td>
-        <td width="20%">
-          <div class="form-group">
-            <input mask="000.000.000-00" type="text" class="form-control" id="cpf" required [(ngModel)]="model.cpf" name="cpf" #cpf="ngModel" placeholder="CPF">
-            <div [hidden]="cpf.valid || cpf.pristine" class="alert alert-danger">
-              Informe o CPF
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <input mask="000.000.000-00" [dropSpecialCharacters]="false" minlength="14" maxlength="14" type="text" class="form-control" id="cpf" required [(ngModel)]="model.cpf" name="cpf" cpf="ngModel" placeholder="CPF" #cpf="ngModel">
+                <div *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)" class="alert alert-danger">
+                  <div *ngIf="cpf.errors.required">
+                    Informe um CPF
+                  </div>
+                  <div *ngIf="cpf.errors.minlength">
+                    CPF deve conter 14 caracteres
+                  </div>
+                  <div *ngIf="cpf.errors.maxlength">
+                    CPF deve ter no 14 caracteres A
+                  </div>
+                </div>
+            </div>  
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <input mask="00/00/0000" minlength="10" maxlength="10" [dropSpecialCharacters]="false" type="text" class="form-control" id="birth_date" required [(ngModel)]="model.birth_date" name="birth_date" #birth_date="ngModel" placeholder="Data de Nascimento" #date="ngModel">
+              <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">
+                  <div *ngIf="date.errors.required">
+                    Informe uma data de nascimento
+                  </div>
+                  <div *ngIf="date.errors.minlength">
+                    Data de nascimento deve conter 10 caracteres
+                  </div>
+                  <div *ngIf="date.errors.maxlength">
+                    Data de nascimento deve conter 10 caracteres
+                  </div>
+                </div>
             </div>
-          </div>
-        </td>
-        <td width="20%">
-          <div class="form-group">
-            <input mask="00/00/0000" type="text" class="form-control" id="birth_date" required [(ngModel)]="model.birth_date" name="birth_date" #birth_date="ngModel" placeholder="Data de Nascimento">
-            <div [hidden]="birth_date.valid || birth_date.pristine" class="alert alert-danger">
-              Informe a Data de N'ascimento
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <select [(ngModel)]="selectedPerfil" required name="perfil" #perfil="ngModel" class="form-control">
+                <option *ngFor="let perfil of perfils" [value]="perfil">{{perfil.name}}</option>
+              </select>
+
+              <div *ngIf="perfil.invalid && (perfil.dirty || perfil.touched)" class="alert alert-danger">
+                Informe o Perfil
+              </div>
             </div>
-          </div>
-        </td>
-        <td width="20%">
-          <div class="form-group">
+          </td>
+          <td width="20%">
+            <button type="submit" class="btn btn-success" [disabled]="!userForm.form.valid">Salvar</button>
+            <button type="button" (click)="hide()" class="btn light">Cancelar</button>
+          </td>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>
 
-            <select
-              [(ngModel)]="model.perfil"
-              name="perfil"
-              [nOptions]="option.name for option in perfils track by option.id"
-              class="form-control"
-              #perfil
-            >
-              <option value="0">Selecione</option>
-            </select>
-
-            <h1>You selected: {{model.perfil}}</h1>
-
-
-            <div [hidden]="perfil.valid || perfil.pristine" class="alert alert-danger">
-              Informe o Perfil
+<div *ngIf="!updateMode">
+  <div [hidden]="!showForm">
+    <form #userForm="ngForm" (ngSubmit)="storeUser(userForm)">
+      <table class="table table-striped table-hover">
+        <tbody>
+          <td width="20%">
+            <div class="form-group">
+              <input type="text" minlength="4" maxlength="255" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel" placeholder="Nome">
+                <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                  <div *ngIf="name.errors.required">
+                    Informe um nome
+                  </div>
+                  <div *ngIf="name.errors.minlength">
+                    Nome deve conter no mínimo 4 caravteres
+                  </div>
+                  <div *ngIf="name.errors.maxlength">
+                    nome deve ter no máximo 255 caracteres
+                  </div>
+                </div>
             </div>
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <input mask="000.000.000-00" [dropSpecialCharacters]="false" minlength="14" maxlength="14" type="text" class="form-control" id="cpf" required [(ngModel)]="model.cpf" name="cpf" cpf="ngModel" placeholder="CPF" #cpf="ngModel">
+                <div *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)" class="alert alert-danger">
+                  <div *ngIf="cpf.errors.required">
+                    Informe um CPF
+                  </div>
+                  <div *ngIf="cpf.errors.minlength">
+                    CPF deve conter 14 caracteres
+                  </div>
+                  <div *ngIf="cpf.errors.maxlength">
+                    CPF deve ter no 14 caracteres A
+                  </div>
+                </div>
+            </div>  
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <input mask="00/00/0000" minlength="10" maxlength="10" [dropSpecialCharacters]="false" type="text" class="form-control" id="birth_date" required [(ngModel)]="model.birth_date" name="birth_date" #birth_date="ngModel" placeholder="Data de Nascimento" #date="ngModel">
+              <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">
+                  <div *ngIf="date.errors.required">
+                    Informe uma data de nascimento
+                  </div>
+                  <div *ngIf="date.errors.minlength">
+                    Data de nascimento deve conter 10 caracteres
+                  </div>
+                  <div *ngIf="date.errors.maxlength">
+                    Data de nascimento deve conter 10 caracteres
+                  </div>
+                </div>
+            </div>
+          </td>
+          <td width="20%">
+            <div class="form-group">
+              <select [(ngModel)]="selectedPerfil" required name="perfil" #perfil="ngModel" class="form-control">
+                <option *ngFor="let perfil of perfils" [value]="perfil">{{perfil.name}}</option>
+              </select>
 
-
-          </div>
-        </td>
-        <td width="20%">
-          <button type="submit" class="btn btn-success" [disabled]="!userForm.form.valid">Salvar</button>
-          <button (click)="hide()" class="btn light">Cancelar</button>
-        </td>
-      </tbody>
-    </table>
-  </form>
+              <div *ngIf="perfil.invalid && (perfil.dirty || perfil.touched)" class="alert alert-danger">
+                Informe o Perfil
+              </div>
+            </div>
+          </td>
+          <td width="20%">
+            <button type="submit" class="btn btn-success" [disabled]="!userForm.form.valid">Salvar</button>
+            <button type="button" (click)="hide(userForm)" class="btn light">Cancelar</button>
+          </td>
+        </tbody>
+      </table>
+    </form>
+  </div>
+  <div [hidden]="showForm">
+    <button type="button" (click)="show()" class="btn btn-success">Novo Usuário</button>
+  </div>
 </div>
 
 
-<div [hidden]="showForm">
-  <button (click)="show()" class="btn btn-success">Novo Usuário</button>
-</div>

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { LoadingService } from '../loading.service';
 
 @Component({
   selector: 'app-user-form',
@@ -9,51 +11,69 @@ import { UserService } from '../user.service';
 })
 export class UserFormComponent implements OnInit {
 
+  @Input() model: User;
+  @Input() id: number;
+
   perfils = [
-    { id: '1', name: 'Analista Ce Compras'},
+    { id: '1', name: 'Analista De Compras'},
     { id: '2', name: 'Analista Financeiro'},
     { id: '3', name: 'Diretor Financeiro'}
   ]
-  model = new User();
+
   submitted = false;
   showForm: boolean;
-  // userService: UserService;
+  selectedPerfil = this.perfils[0];
+  updateMode = false;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private loadingService: LoadingService
   ) {}
 
-  onSubmit() {
-    this.submitted = true;
+  ngOnInit() {
+    if(typeof this.model == 'undefined'){
+      this.model = new User();
+      this.updateMode = true;
+      this.showForm = true;
+      this.id = 0;
+
+      console.log(this.updateMode);
+    }
+  }
+  
+  hide(form: NgForm) {
     this.showForm = false;
-    this.storeUser();
+    form.resetForm();
   }
 
   show() {
-    this.submitted = false;
     this.showForm = true;
   }
 
-  hide() {
-    this.submitted = true;
-    this.showForm = false;
-  }
-
-  storeUser(): void {
+  storeUser(form: NgForm){
+    this.model.perfil = this.selectedPerfil.id;
+    this.loadingService.toggle();
     this.userService.storeUser(this.model)
       .subscribe(() => {
         if(!this.userService.httpError){
+          this.showForm = false;
+          form.resetForm();
         }
-        this.model = new User();
+        this.loadingService.toggle();
     });
   }
 
-
-  // TODO: Remove this when we're done
-  get diagnostic() { return JSON.stringify(this.model); }
-
-  ngOnInit() {
-
+  updateUser(form: NgForm){
+    this.model.perfil = this.selectedPerfil.id;
+    this.loadingService.toggle();
+    this.userService.updateUser(this.model)
+      .subscribe(() => {
+        if(!this.userService.httpError){
+          this.showForm = false;
+          form.resetForm();
+        }
+        this.loadingService.toggle();
+    });
   }
 
 }

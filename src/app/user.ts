@@ -3,5 +3,5 @@ export class User {
   name: string;
   cpf: string;
   birth_date: string;
-  peril: string;
+  perfil: string;
 }
