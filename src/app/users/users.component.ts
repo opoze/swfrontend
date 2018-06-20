@@ -14,6 +14,7 @@ export class UsersComponent implements OnInit {
   loading: boolean;
   selectedUser: User;
   selectedUserId: number;
+  search: string;
 
   constructor(
     private userService: UserService
@@ -34,7 +35,13 @@ export class UsersComponent implements OnInit {
     this.loading = false;
     this.selectedUser = null;
     this.selectedUserId = 0;
+    this.search = '';
     this.getUsers();
+
+
+    this.userService.findUserByName().subscribe(() =>{
+      console.log('UHHHUHUUUUUUU');
+    });
   }
 
   getUsers(): void {
@@ -72,5 +79,13 @@ export class UsersComponent implements OnInit {
         this.unsetUser();
     });
   }
+
+  find(search: string) {
+    this.userService.findUserByName(this.search)
+      .subscribe(() =>{
+        console.log('UHHHUHUUUUUUU');
+      });
+  }
+
 
 }

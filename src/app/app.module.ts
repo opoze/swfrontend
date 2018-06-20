@@ -15,6 +15,7 @@ import { ProposalDetailComponent } from './proposal-detail/proposal-detail.compo
 import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CpfPipePipe } from './cpf-pipe.pipe';
+import { UserFormComponent } from './user-form/user-form.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { CpfPipePipe } from './cpf-pipe.pipe';
     ProposalDetailComponent,
     SuplierDetailComponent,
     MessagesComponent,
-    CpfPipePipe
+    CpfPipePipe,
+    UserFormComponent
   ],
   imports: [
     BrowserModule,

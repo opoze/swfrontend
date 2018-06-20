@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
 import { User } from './user';
-import { Observable, of } from 'rxjs';
+import { Observable, of, fromEvent } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
+import { fromEvent } from 'rxjs';
+import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
+
+// const searchBox = document.getElementById('search_box');
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -15,7 +19,7 @@ const httpOptions = {
 
 export class UserService {
 
-  private usersUrl = 'http://erp/user';
+  private usersUrl = 'http://127.0.0.1:8000/user';
   public httpError = false;
 
   constructor(
@@ -60,6 +64,31 @@ export class UserService {
     );
   }
 
+  findUserByName(): Observable<User[]> {
+    // let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    // const url = `${this.usersUrl}/${term}`;
+    // return this.http.get(url).pipe(
+    //   tap(data => this.log('Pesquisado usuários')),
+    //   catchError(this.handleError<any>('Pesquisa usuários'))
+    // );
+
+    const url = `${this.usersUrl}`;
+    // const url = this.usersUrl;
+    const searchBox = document.getElementById('search_box');
+    return fromEvent(searchBox, 'input').pipe(
+      map((e: KeyboardEvent) => e.target.value),
+      filter(text => text.length > 2),
+      debounceTime(1000),
+      distinctUntilChanged(),
+      switchMap((term) => ajax(`http://127.0.0.1:8000/user/${term}`),
+      catchError(this.handleError<any>('Pesquisa usuários'))
+    )
+
+  }
+
+
+
+
   private log(message: string){
     console.log('UserService: ' + message);
   }
@@ -97,5 +126,5 @@ export class UserService {
       }
     }
   }
-  
+
 }
