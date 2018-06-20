@@ -4,7 +4,6 @@ import { User } from './user';
 import { Observable, of, fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
-import { fromEvent } from 'rxjs';
 import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 
@@ -21,6 +20,8 @@ export class UserService {
 
   private usersUrl = 'http://127.0.0.1:8000/user';
   public httpError = false;
+  public loadingUsers = false;
+  public loadingUsersError = false;
 
   constructor(
     private http: HttpClient,
@@ -29,13 +30,20 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     this.httpError = false;
+    this.loadingUsers = true;
     return this.http.get<User[]>(this.usersUrl)
     .pipe(
       tap(
-        data => this.log(`fetched users`),
-        error => this.httpError = true
+        data => {
+          this.log(`fetched users`);
+          this.loadingUsers = false;
+        },
+        error => {
+          this.httpError = true;
+          this.loadingUsers = false;
+        }
       ),
-      catchError(this.handleError('getUSers', []))
+      catchError(this.handleError('Get Usuários', []))
     );
   }
 
@@ -65,29 +73,30 @@ export class UserService {
   }
 
   findUserByName(): Observable<User[]> {
-    // let headers = new HttpHeaders().set('Content-Type', 'application/json')
-    // const url = `${this.usersUrl}/${term}`;
-    // return this.http.get(url).pipe(
-    //   tap(data => this.log('Pesquisado usuários')),
-    //   catchError(this.handleError<any>('Pesquisa usuários'))
-    // );
-
-    const url = `${this.usersUrl}`;
-    // const url = this.usersUrl;
+    const url = `${this.usersUrl}/`;
     const searchBox = document.getElementById('search_box');
     return fromEvent(searchBox, 'input').pipe(
-      map((e: KeyboardEvent) => e.target.value),
+      map((e: any) => e.target.value),
       filter(text => text.length > 2),
       debounceTime(1000),
       distinctUntilChanged(),
-      switchMap((term) => ajax(`http://127.0.0.1:8000/user/${term}`),
-      catchError(this.handleError<any>('Pesquisa usuários'))
+      // switchMap((term) => ajax(url+term)),
+      switchMap(
+        (term) => this.http.get<User[]>(url+term).pipe(
+          tap(
+            data => {
+              this.log(`fetched users`);
+              this.loadingUsersError = false;
+            },
+            error => {
+              this.loadingUsersError = true;
+            }
+          ),
+          catchError(this.handleError<any>('Pesquisar usuários'))
+        )
+      )
     )
-
   }
-
-
-
 
   private log(message: string){
     console.log('UserService: ' + message);

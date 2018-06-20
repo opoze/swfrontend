@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
+import { tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users',
@@ -20,36 +21,26 @@ export class UsersComponent implements OnInit {
     private userService: UserService
   ) { }
 
-  ngOnChanges(changes: SimpleChanges) {
-    for (let propName in changes) {
-      // let chng = changes[propName];
-      // let cur  = JSON.stringify(chng.currentValue);
-      // let prev = JSON.stringify(chng.previousValue);
-      // this.changeLog.push(`${propName}: currentValue = ${cur}, previousValue = ${prev}`);
-      console.log(propName);
-    }
-  }
-
-
   ngOnInit() {
-    this.loading = false;
     this.selectedUser = null;
     this.selectedUserId = 0;
     this.search = '';
     this.getUsers();
 
-
-    this.userService.findUserByName().subscribe(() =>{
-      console.log('UHHHUHUUUUUUU');
+    // Find KeyUp
+    this.userService.findUserByName().subscribe((data)=>{
+      if(!this.userService.loadingUsersError){
+        this.users = data;
+      }
     });
   }
 
+
+
   getUsers(): void {
-    this.loading = true;
     this.userService.getUsers()
       .subscribe(users => {
         this.users = users;
-        this.loading = false;
       });
   }
 
@@ -79,13 +70,5 @@ export class UsersComponent implements OnInit {
         this.unsetUser();
     });
   }
-
-  find(search: string) {
-    this.userService.findUserByName(this.search)
-      .subscribe(() =>{
-        console.log('UHHHUHUUUUUUU');
-      });
-  }
-
 
 }
