@@ -65,10 +65,32 @@ export class UserService {
     const url = `${this.usersUrl}/${user.id}`;
     return this.http.post<User>(url, user, {headers: headers}).pipe(
       tap(
-        data => this.log(`updated user id=${user.id}`),
+        data => {
+          this.messageService.add('Usuário alterado.', 'success');
+          this.log(`updated user id=${user.id}`);
+        },
         error => this.httpError = true
       ),
       catchError(this.handleError<any>('Atualizar usuário'))
+    );
+  }
+
+  storeUser (user: User): Observable<any> {
+    this.httpError = false;
+    let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    const url = `${this.usersUrl}`;
+    return this.http.post<User>(url, user, {headers: headers}).pipe(
+      tap(
+        data => {
+          this.messageService.add('Usuário inserido.', 'success');
+          this.log(`insert user id=${user.id}`);
+        },
+        error => {
+          this.httpError = true;
+          this.messageService.add('Não foi possível adicionar o usuário.', 'danger');
+        }
+      ),
+      catchError(this.handleError<any>('Inserir Usuário'))
     );
   }
 
@@ -77,8 +99,8 @@ export class UserService {
     const searchBox = document.getElementById('search_box');
     return fromEvent(searchBox, 'input').pipe(
       map((e: any) => e.target.value),
-      filter(text => text.length > 2),
-      debounceTime(1000),
+      filter(text => text.length > 0),
+      debounceTime(500),
       distinctUntilChanged(),
       // switchMap((term) => ajax(url+term)),
       switchMap(
@@ -87,9 +109,11 @@ export class UserService {
             data => {
               this.log(`fetched users`);
               this.loadingUsersError = false;
+              this.loadingUsers = false;
             },
             error => {
               this.loadingUsersError = true;
+              this.loadingUsers = false;
             }
           ),
           catchError(this.handleError<any>('Pesquisar usuários'))

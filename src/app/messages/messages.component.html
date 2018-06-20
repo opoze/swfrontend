@@ -1,25 +1,51 @@
-<div *ngIf="messageService.total">
+<div style="margin:20px" *ngIf="messageService.total">
 
-  <button class="clear" (click)="messageService.clear()">OK</button>
-    <div *ngIf="messageService.primary.length">
-      <div class="alert alert-primary" *ngFor='let message of messageService.primary'> {{message}} </div>
+    <div style="margin:20px" *ngIf="messageService.primary.length">
+      <div class="alert alert-primary">
+        <div *ngFor='let message of messageService.primary'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
-    <div *ngIf="messageService.secondary.length">
-      <div class="alert alert-secondary" *ngFor='let message of messageService.secondary'> {{message}} </div>
+
+    <div style="margin:20px" *ngIf="messageService.secondary.length">
+      <div class="alert alert-secondary">
+        <div *ngFor='let message of messageService.secondary'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
-    <div *ngIf="messageService.success.length">
-      <div class="alert alert-success" *ngFor='let message of messageService.success'> {{message}} </div>
+
+    <div style="margin:20px" *ngIf="messageService.success.length">
+      <div class="alert alert-success">
+        <div *ngFor='let message of messageService.success'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
-    <div *ngIf="messageService.danger.length">
-      <div class="alert alert-danger" *ngFor='let message of messageService.danger'> {{message}} </div>
+
+    <div style="margin:20px" *ngIf="messageService.danger.length">
+      <div class="alert alert-danger">
+        <div *ngFor='let message of messageService.danger'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
-    <div *ngIf="messageService.warning.length">
-      <div class="alert alert-warning" *ngFor='let message of messageService.warning'> {{message}} </div>
+
+    <div style="margin:20px" *ngIf="messageService.warning.length">
+      <div class="alert alert-warning">
+        <div *ngFor='let message of messageService.warning'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
-    <div *ngIf="messageService.info.length">
-      <div class="alert alert-info" *ngFor='let message of messageService.info'> {{message}} </div>
-     </div>
-    <div *ngIf="messageService.dark.length">
-      <div class="alert alert-dark" *ngFor='let message of messageService.dark'> {{message}} </div>
+
+    <div style="margin:20px" *ngIf="messageService.info.length">
+      <div class="alert alert-info">
+        <div *ngFor='let message of messageService.info'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
+    </div>
+
+    <div style="margin:20px" *ngIf="messageService.dark.length">
+      <div class="alert alert-dark">
+        <div *ngFor='let message of messageService.dark'> {{message}} </div>
+        <button class="btn btn-light" (click)="messageService.clear()">OK</button>
+      </div>
     </div>
 </div>

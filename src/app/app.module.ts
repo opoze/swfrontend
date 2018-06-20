@@ -16,6 +16,7 @@ import { SuplierDetailComponent } from './suplier-detail/suplier-detail.componen
 import { MessagesComponent } from './messages/messages.component';
 import { CpfPipePipe } from './cpf-pipe.pipe';
 import { UserFormComponent } from './user-form/user-form.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { UserFormComponent } from './user-form/user-form.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { tap, map } from 'rxjs/operators';
@@ -9,7 +9,10 @@ import { tap, map } from 'rxjs/operators';
   styleUrls: ['./users.component.css']
 })
 
+
 export class UsersComponent implements OnInit {
+
+  @ViewChild('myModal') myModal;
 
   users: User[];
   loading: boolean;
@@ -23,6 +26,7 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.selectedUser = null;
+    this.users = [];
     this.selectedUserId = 0;
     this.search = '';
     this.getUsers();
@@ -34,8 +38,6 @@ export class UsersComponent implements OnInit {
       }
     });
   }
-
-
 
   getUsers(): void {
     this.userService.getUsers()
@@ -57,7 +59,7 @@ export class UsersComponent implements OnInit {
   removeUSer(): void {
   }
 
-  saveUser(): void {
+  updateUser(): void {
     this.userService.updateUser(this.selectedUser)
       .subscribe(() => {
         if(!this.userService.httpError){
@@ -69,6 +71,19 @@ export class UsersComponent implements OnInit {
         }
         this.unsetUser();
     });
+  }
+
+  onChangeSearch(term) {
+    if(term.length > 0){
+      this.userService.loadingUsers = true;
+    }
+    if(term.length == 0){
+      this.getUsers();
+    }
+  }
+
+  openModel() {
+    this.myModal.nativeElement.className = 'modal fade show';
   }
 
 }
