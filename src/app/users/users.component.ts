@@ -12,12 +12,10 @@ import { tap, map } from 'rxjs/operators';
 
 export class UsersComponent implements OnInit {
 
-  @ViewChild('myModal') myModal;
-
   users: User[];
   loading: boolean;
-  selectedUser: User;
-  selectedUserId: number;
+  // selectedUser: User;
+  // selectedUserId: number;
   search: string;
 
   constructor(
@@ -25,9 +23,9 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.selectedUser = null;
+    // this.selectedUser = null;
     this.users = [];
-    this.selectedUserId = 0;
+    // this.selectedUserId = 0;
     this.search = '';
     this.getUsers();
 
@@ -46,32 +44,32 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  setUser(user:User): void {
-    this.selectedUser = { ...user };
-    this.selectedUserId = user.id;
-  }
+  // setUser(user:User): void {
+  //   this.selectedUser = { ...user };
+  //   this.selectedUserId = user.id;
+  // }
+  //
+  // unsetUser(): void {
+  //   this.selectedUser = null;
+  //   this.selectedUserId = 0;
+  // }
+  //
+  // removeUSer(): void {
+  // }
 
-  unsetUser(): void {
-    this.selectedUser = null;
-    this.selectedUserId = 0;
-  }
-
-  removeUSer(): void {
-  }
-
-  updateUser(): void {
-    this.userService.updateUser(this.selectedUser)
-      .subscribe(() => {
-        if(!this.userService.httpError){
-          this.users = this.users.map(
-            item => {
-              return item.id == this.selectedUserId ? this.selectedUser : item;
-            }
-          );
-        }
-        this.unsetUser();
-    });
-  }
+  // updateUser(): void {
+  //   this.userService.updateUser(this.selectedUser)
+  //     .subscribe(() => {
+  //       if(!this.userService.httpError){
+  //         this.users = this.users.map(
+  //           item => {
+  //             return item.id == this.selectedUserId ? this.selectedUser : item;
+  //           }
+  //         );
+  //       }
+  //       this.unsetUser();
+  //   });
+  // }
 
   onChangeSearch(term) {
     if(term.length > 0){
@@ -80,10 +78,6 @@ export class UsersComponent implements OnInit {
     if(term.length == 0){
       this.getUsers();
     }
-  }
-
-  openModel() {
-    this.myModal.nativeElement.className = 'modal fade show';
   }
 
 }

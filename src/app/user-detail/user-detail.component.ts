@@ -13,7 +13,7 @@ import { UserService }  from '../user.service';
 
 export class UserDetailComponent implements OnInit {
 
-  @Input() user : User;
+  user : User;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,15 +28,13 @@ export class UserDetailComponent implements OnInit {
   getUser(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.userService.getUser(id)
-      .subscribe(user => this.user = user);
+      .subscribe(user => {
+        this.user = user;
+      });
   }
 
   goBack() : void {
     this.location.back();
   }
 
-  save(): void {
-    this.userService.updateUser(this.user)
-      .subscribe(() => this.goBack());
-  }
 }

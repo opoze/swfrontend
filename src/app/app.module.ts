@@ -15,9 +15,10 @@ import { ProposalDetailComponent } from './proposal-detail/proposal-detail.compo
 import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { CpfPipePipe } from './cpf-pipe.pipe';
-import { UserFormComponent } from './user-form/user-form.component';
+import { UserCreateComponent } from './user-create/user-create.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { LoadingComponent } from './loading/loading.component';
+import { UserEditComponent } from './user-edit/user-edit.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,9 @@ import { LoadingComponent } from './loading/loading.component';
     SuplierDetailComponent,
     MessagesComponent,
     CpfPipePipe,
-    UserFormComponent,
-    LoadingComponent
+    UserCreateComponent,
+    LoadingComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

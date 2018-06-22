@@ -1,10 +1,10 @@
 <div class="container">
 
   <div class="row" style="margin:20px">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <h4>Usuários</h4>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
       <input
       id = "search_box"
       class="form-control"
@@ -13,6 +13,13 @@
       (ngModelChange)="onChangeSearch($event)"
       >
     </div>
+
+    <div class="cold-md-1">
+      <button type="button" name="button" routerLink="/usercreate" class="btn btn-success">
+        Novo
+      </button>
+    </div>
+
   </div>
 
   <div class="row">
@@ -28,7 +35,7 @@
                 <th width="20%">Nome</th>
                 <th width="20%">CPF</th>
                 <th width="20%">Data de nascimento</th>
-                <th width="20%">perfil</th>
+                <th width="20%">Perfil</th>
                 <th width="20%">Opções</th>
               </tr>
             </thead>
@@ -38,21 +45,14 @@
                 <td *ngIf="selectedUserId!=user.id">{{user.cpf | cpfPipe}}</td>
                 <td *ngIf="selectedUserId!=user.id">{{user.birth_date}}</td>
                 <td *ngIf="selectedUserId!=user.id">{{user.perfil}}</td>
-                
-
-                <td *ngIf="selectedUserId!=user.id">
-                  <button type="button" class="btn btn-primary" (click)="setUser(user)">
+                <td>
+                  <button type="button" name="button" routerLink="/user/{{user.id}}" class="btn btn-primary">
+                    Ver
+                  </button>
+                  <button type="button" name="button" routerLink="/user/{{user.id}}/edit" class="btn btn-primary">
                     Editar
                   </button>
-                  <button type="button" class="btn btn-dange" (click)="removeUser()">
-                    Remover
-                  </button>
                 </td>
-
-                <td *ngIf="selectedUserId==user.id" colspan="5">
-                  <app-user-form [model]="selectedUser" [id]="selectedUserId"></app-user-form>
-                <td>
-
               </tr>
             </tbody>
           </table>
@@ -63,14 +63,13 @@
             Nenhum usuário encontrado
           </div>
         </div>
+
+
       </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col">
-      <app-user-form></app-user-form>
-    </div>
+
+
   </div>
 
   <div class="row">

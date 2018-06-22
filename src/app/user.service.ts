@@ -19,6 +19,7 @@ const httpOptions = {
 export class UserService {
 
   private usersUrl = 'http://127.0.0.1:8000/user';
+  private findUrl = 'http://127.0.0.1:8000/userfind';
   public httpError = false;
   public loadingUsers = false;
   public loadingUsersError = false;
@@ -95,7 +96,7 @@ export class UserService {
   }
 
   findUserByName(): Observable<User[]> {
-    const url = `${this.usersUrl}/`;
+    const url = `${this.findUrl}/`;
     const searchBox = document.getElementById('search_box');
     return fromEvent(searchBox, 'input').pipe(
       map((e: any) => e.target.value),

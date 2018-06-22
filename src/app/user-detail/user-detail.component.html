@@ -1,20 +1,27 @@
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div class="col-md-6">
+      <h4>Detalhes usuário X</h4>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-light" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
 <div *ngIf="user">
   <h2>Detelhes: {{ user.name | uppercase }}</h2>
-  <div><span>id: </span>{{user.id}}</div>
+
   <div>
     <label>name:</label>
-    <input [(ngModel)]="user.name" placeholder="Nome">
-
+    {{user.name}}
     <label>CPF:</label>
-    <input [(ngModel)]="user.cpf" placeholder="CPF">
-
+    {{user.cpf | cpfPipe}}
     <label>Data de Nascimento:</label>
-    <input [(ngModel)]="user.birth_date" placeholder="Data de Nascimento">
-
+    {{user.birth_date}}
     <label>Perfil:</label>
-    <input [(ngModel)]="user.perfil" placeholder="Perfil">
-
-    <button (click)="save()">Salvar</button>
+    {{user.perfil}}
   </div>
-  <button (click)="goBack()">Voltar</button>
+
 </div>
