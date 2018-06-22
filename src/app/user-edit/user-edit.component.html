@@ -1,11 +1,16 @@
 <div class="container">
   <div class="row" style="margin:20px">
     <div class="col-md-6">
-      <h4>Editando usuário X</h4>
+      <div *ngIf="user">
+        <h4>Editar usuário {{user.name}}</h4>
+      </div>
+      <div *ngIf="!user">
+        <h4>Editar usuário</h4>
+      </div>
     </div>
     <div class="col-md-5"></div>
     <div class="col-md-1">
-      <button class="btn btn-light" (click)="goBack()">Voltar</button>
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
     </div>
   </div>
 </div>

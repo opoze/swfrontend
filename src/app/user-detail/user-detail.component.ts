@@ -1,7 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
-
 import { User } from '../user';
 import { UserService }  from '../user.service';
 
@@ -23,6 +22,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.getUser();
+
   }
 
   getUser(): void {

@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { User } from '../user';
 import { UserService } from '../user.service';
 import { LoadingService } from '../loading.service';
+import { MessageService } from '../message.service';
 import { Location } from '@angular/common';
 
 @Component({
@@ -27,23 +28,28 @@ export class UserCreateComponent implements OnInit {
   constructor(
     private userService: UserService,
     private loadingService: LoadingService,
-    private location: Location
+    private location: Location,
+    private message: MessageService
   ) {}
 
   ngOnInit() {
   }
 
-  // storeUser(form: NgForm){
-  //   this.model.perfil = this.selectedPerfil.id;
-  //   this.loadingService.toggle();
-  //   this.userService.storeUser(this.model)
-  //     .subscribe(() => {
-  //       if(!this.userService.httpError){
-  //         form.resetForm();
-  //       }
-  //       this.loadingService.toggle();
-  //   });
-  // }
+  storeUser(form: NgForm){
+    this.model.perfil = this.selectedPerfil.id;
+    this.loadingService.toggle();
+    this.userService.storeUser(this.model)
+      .subscribe(() => {
+        if(!this.userService.httpError){
+          form.resetForm();
+        }
+        this.loadingService.toggle();
+    });
+  }
+
+  cancel(): void{
+    this.goBack();
+  }
 
   goBack() : void {
     this.location.back();
