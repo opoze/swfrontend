@@ -14,8 +14,6 @@ export class UsersComponent implements OnInit {
 
   users: User[];
   loading: boolean;
-  // selectedUser: User;
-  // selectedUserId: number;
   search: string;
 
   constructor(
@@ -23,9 +21,7 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.selectedUser = null;
     this.users = [];
-    // this.selectedUserId = 0;
     this.search = '';
     this.getUsers();
 
@@ -44,37 +40,7 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  // setUser(user:User): void {
-  //   this.selectedUser = { ...user };
-  //   this.selectedUserId = user.id;
-  // }
-  //
-  // unsetUser(): void {
-  //   this.selectedUser = null;
-  //   this.selectedUserId = 0;
-  // }
-  //
-  // removeUSer(): void {
-  // }
-
-  // updateUser(): void {
-  //   this.userService.updateUser(this.selectedUser)
-  //     .subscribe(() => {
-  //       if(!this.userService.httpError){
-  //         this.users = this.users.map(
-  //           item => {
-  //             return item.id == this.selectedUserId ? this.selectedUser : item;
-  //           }
-  //         );
-  //       }
-  //       this.unsetUser();
-  //   });
-  // }
-
   onChangeSearch(term) {
-    if(term.length > 0){
-      this.userService.loadingUsers = true;
-    }
     if(term.length == 0){
       this.getUsers();
     }

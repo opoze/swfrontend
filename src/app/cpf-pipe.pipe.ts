@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'cpfPipe'
 })
-export class CpfPipePipe implements PipeTransform {
+export class CpfPipe implements PipeTransform {
 
   transform(value: any, args?: any): string {
     if(value){
@@ -15,7 +15,7 @@ export class CpfPipePipe implements PipeTransform {
             .concat(value.substring(6,9))
             .concat("-")
             .concat(value.substring(9,11))
-        } 
+        }
     }
     return value;
   }

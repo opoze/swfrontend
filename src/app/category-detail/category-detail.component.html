@@ -1,3 +1,31 @@
-<p>
-  category-detail works!
-</p>
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div class="col-md-6">
+      <div *ngIf="user">
+        <h4>Detalhes da categoria {{category.name}}</h4>
+      </div>
+      <div *ngIf="!category">
+        <h4>Detalhes da categoria</h4>
+      </div>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="category">
+
+  <table class="table">
+      <tr>
+        <td>Nome</td>
+        <td>Descrição</td>
+      </tr>
+      <tr>
+        <td>{{category.name}}</td>
+        <td>{{category.description}}</td>
+      </tr>
+  </table>
+
+</div>

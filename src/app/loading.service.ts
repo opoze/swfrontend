@@ -8,7 +8,7 @@ export class LoadingService {
 
   public loading: boolean = false;
 
-  constructor() { 
+  constructor() {
   }
 
   setLoading(loading: boolean) {

@@ -5,6 +5,7 @@ import { Observable, of, fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
 import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { LoadingService } from './loading.service'
 
 
 // const searchBox = document.getElementById('search_box');
@@ -21,27 +22,27 @@ export class UserService {
   private usersUrl = 'http://127.0.0.1:8000/user';
   private findUrl = 'http://127.0.0.1:8000/userfind';
   public httpError = false;
-  public loadingUsers = false;
   public loadingUsersError = false;
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
   getUsers(): Observable<User[]> {
+    this.loadingService.setLoading(true);
     this.httpError = false;
-    this.loadingUsers = true;
     return this.http.get<User[]>(this.usersUrl)
     .pipe(
       tap(
         data => {
           this.log(`fetched users`);
-          this.loadingUsers = false;
+          this.loadingService.setLoading(false);
         },
         error => {
           this.httpError = true;
-          this.loadingUsers = false;
+          this.loadingService.setLoading(false);
         }
       ),
       catchError(this.handleError('Get Usuários', []))
@@ -49,18 +50,26 @@ export class UserService {
   }
 
   getUser(id: number): Observable<User> {
+    this.loadingService.setLoading(true);
     this.httpError = false;
     const url = `${this.usersUrl}/${id}`;
     return this.http.get<User>(url).pipe(
       tap(
-        data => this.log(`fetched user id=${id}`),
-        error => this.httpError = true
+        data => {
+          this.log(`fetched user id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
       ),
       catchError(this.handleError<User>(`getUser id=${id}`))
     );
   }
 
   updateUser (user: User): Observable<any> {
+    this.loadingService.setLoading(true);
     this.httpError = false;
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.usersUrl}/${user.id}`;
@@ -69,14 +78,20 @@ export class UserService {
         data => {
           this.messageService.add('Usuário alterado.', 'success');
           this.log(`updated user id=${user.id}`);
+          this.loadingService.setLoading(false);
         },
-        error => this.httpError = true
+        error => {
+          this.httpError = true;
+          this.messageService.add('Não foi possível alterar o usuário.', 'danger');
+          this.loadingService.setLoading(false);
+        }
       ),
       catchError(this.handleError<any>('Atualizar usuário'))
     );
   }
 
   storeUser (user: User): Observable<any> {
+    this.loadingService.setLoading(true);
     this.httpError = false;
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.usersUrl}`;
@@ -85,10 +100,12 @@ export class UserService {
         data => {
           this.messageService.add('Usuário inserido.', 'success');
           this.log(`insert user id=${user.id}`);
+          this.loadingService.setLoading(false);
         },
         error => {
           this.httpError = true;
           this.messageService.add('Não foi possível adicionar o usuário.', 'danger');
+          this.loadingService.setLoading(false);
         }
       ),
       catchError(this.handleError<any>('Inserir Usuário'))
@@ -96,6 +113,7 @@ export class UserService {
   }
 
   findUserByName(): Observable<User[]> {
+    this.loadingService.setLoading(true);
     const url = `${this.findUrl}/`;
     const searchBox = document.getElementById('search_box');
     return fromEvent(searchBox, 'input').pipe(
@@ -110,11 +128,11 @@ export class UserService {
             data => {
               this.log(`fetched users`);
               this.loadingUsersError = false;
-              this.loadingUsers = false;
+              this.loadingService.setLoading(false);
             },
             error => {
               this.loadingUsersError = true;
-              this.loadingUsers = false;
+              this.loadingService.setLoading(false);
             }
           ),
           catchError(this.handleError<any>('Pesquisar usuários'))

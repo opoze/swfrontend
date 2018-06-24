@@ -14,11 +14,14 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
 import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
 import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
 import { MessagesComponent } from './messages/messages.component';
-import { CpfPipePipe } from './cpf-pipe.pipe';
+import { CpfPipe } from './cpf-pipe.pipe';
 import { UserCreateComponent } from './user-create/user-create.component';
 import { NgxMaskModule } from 'ngx-mask';
 import { LoadingComponent } from './loading/loading.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
+import { MyDatePipe } from './my-date-pipe.pipe';
+import { PerfilPipe } from './perfil-pipe.pipe';
+import { CategoryEditComponent } from './category-edit/category-edit.component';
 
 @NgModule({
   declarations: [
@@ -32,10 +35,13 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     ProposalDetailComponent,
     SuplierDetailComponent,
     MessagesComponent,
-    CpfPipePipe,
+    CpfPipe,
     UserCreateComponent,
     LoadingComponent,
-    UserEditComponent
+    UserEditComponent,
+    MyDatePipe,
+    PerfilPipe,
+    CategoryEditComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +50,11 @@ import { UserEditComponent } from './user-edit/user-edit.component';
     FormsModule,
     NgxMaskModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    MyDatePipe,
+    PerfilPipe,
+    CpfPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

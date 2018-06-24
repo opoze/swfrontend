@@ -1,48 +1,144 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
 import { Category } from './category';
-import { Observable, of } from 'rxjs';
+import { Observable, of, fromEvent } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { MessageService } from './message.service';
+import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { LoadingService } from './loading.service'
 
+
+// const searchBox = document.getElementById('search_box');
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
-
 
 @Injectable({
   providedIn: 'root'
 })
 
-
 export class CategoryService {
 
-  private categoriesUrl = 'http://localhost:8000/categories';
+  private categoriesUrl = 'http://127.0.0.1:8000/category';
+  private findUrl = 'http://127.0.0.1:8000/categoryfind';
+  public httpError = false;
+  public loadingCategoriesError = false;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private messageService: MessageService,
+    private loadingService: LoadingService
   ) { }
 
   getCategories(): Observable<Category[]> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
     return this.http.get<Category[]>(this.categoriesUrl)
     .pipe(
-      tap(categories => this.log(`fetched categories`)),
-      catchError(this.handleError('getCaregories', []))
+      tap(
+        data => {
+          this.log(`fetched categories`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError('Get Categorias', []))
     );
   }
 
   getCategory(id: number): Observable<Category> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
     const url = `${this.categoriesUrl}/${id}`;
     return this.http.get<Category>(url).pipe(
-      tap(_ => this.log(`fetched category id=${id}`)),
+      tap(
+        data => {
+          this.log(`fetched catgory id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
       catchError(this.handleError<Category>(`getCategory id=${id}`))
     );
   }
 
   updateCategory (category: Category): Observable<any> {
-    return this.http.put(this.categoriesUrl, Category, httpOptions).pipe(
-      tap(_ => this.log(`updated category id=${category.id}`)),
-      catchError(this.handleError<any>('updateCategory'))
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    const url = `${this.categoriesUrl}/${category.id}`;
+    return this.http.post<Category>(url, category, {headers: headers}).pipe(
+      tap(
+        data => {
+          this.messageService.add('Categoria alterado.', 'success');
+          this.log(`updated category id=${category.id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.messageService.add('Não foi possível alterar a categoria.', 'danger');
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>('Atualizar categoria'))
     );
+  }
+
+  storeCategory (category: Category): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    const url = `${this.categoriesUrl}`;
+    return this.http.post<Category>(url, category, {headers: headers}).pipe(
+      tap(
+        data => {
+          this.messageService.add('Categoria inserida.', 'success');
+          this.log(`insert category id=${category.id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.messageService.add('Não foi possível adicionar a categoria.', 'danger');
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>('Inserir Categoria'))
+    );
+  }
+
+  findCategoryByName(): Observable<Category[]> {
+    this.loadingService.setLoading(true);
+    const url = `${this.findUrl}/`;
+    const searchBox = document.getElementById('search_box');
+    return fromEvent(searchBox, 'input').pipe(
+      map((e: any) => e.target.value),
+      filter(text => text.length > 0),
+      debounceTime(500),
+      distinctUntilChanged(),
+      // switchMap((term) => ajax(url+term)),
+      switchMap(
+        (term) => this.http.get<Category[]>(url+term).pipe(
+          tap(
+            data => {
+              this.log(`fetched categories`);
+              this.loadingCategoriesError = false;
+              this.loadingService.setLoading(false);
+            },
+            error => {
+              this.loadingCategoriesError = true;
+              this.loadingService.setLoading(false);
+            }
+          ),
+          catchError(this.handleError<any>('Pesquisar usuários'))
+        )
+      )
+    )
   }
 
   private log(message: string){
@@ -59,13 +155,28 @@ export class CategoryService {
     return (error: any): Observable<T> => {
 
       // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+      this.validationErrors(error);
 
-      // TODO: better job of transforming error for user consumption
+      // TODO: better job of transforming error for category consumption
       this.log(`${operation} failed: ${error.message}`);
 
       // Let the app keep running by returning an empty result.
       return of(result as T);
+
     };
   }
+
+  private validationErrors(error: any){
+    if(typeof error != 'undefined'){
+      if(typeof error.error != 'undefined'){
+        if(typeof error.error.errors != 'undefined'){
+          for(let i in error.error.errors){
+            // console.log(error.error.errors[i][0]));
+            this.messageService.add(error.error.errors[i][0], 'danger');
+          }
+        }
+      }
+    }
+  }
+
 }
