@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
-import { tap, map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-users',

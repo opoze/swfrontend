@@ -29,6 +29,7 @@ export class CategoryCreateComponent implements OnInit {
         .subscribe(() => {
           if(!this.categoryService.httpError){
             form.resetForm();
+            this.location.back();
           }
       });
     }

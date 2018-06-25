@@ -36,6 +36,7 @@ export class UserCreateComponent implements OnInit {
       .subscribe(() => {
         if(!this.userService.httpError){
           form.resetForm();
+          this.location.back();
         }
     });
   }

@@ -24,6 +24,12 @@ import { PerfilPipe } from './perfil-pipe.pipe';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { TextMaxPipe } from './text-max.pipe';
 import { CategoryCreateComponent } from './category-create/category-create.component';
+import { CnpjPipe } from './cnpj-pipe.pipe';
+import { SuplierCreateComponent } from './suplier-create/suplier-create.component';
+import { SuplierEditComponent } from './suplier-edit/suplier-edit.component';
+import { MyDateTimePipe } from './my-date-time.pipe';
+import { StatusPipePipe } from './status-pipe.pipe';
+import { MoneyPipePipe } from './money-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -45,7 +51,13 @@ import { CategoryCreateComponent } from './category-create/category-create.compo
     PerfilPipe,
     CategoryEditComponent,
     TextMaxPipe,
-    CategoryCreateComponent
+    CategoryCreateComponent,
+    CnpjPipe,
+    SuplierCreateComponent,
+    SuplierEditComponent,
+    MyDateTimePipe,
+    StatusPipePipe,
+    MoneyPipePipe
   ],
   imports: [
     BrowserModule,
@@ -57,7 +69,8 @@ import { CategoryCreateComponent } from './category-create/category-create.compo
   providers: [
     MyDatePipe,
     PerfilPipe,
-    CpfPipe
+    CpfPipe,
+    CnpjPipe
   ],
   bootstrap: [AppComponent]
 })

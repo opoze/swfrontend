@@ -1,7 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
-
 import { Suplier } from '../suplier';
 import { SuplierService }  from '../suplier.service';
 
@@ -13,7 +12,7 @@ import { SuplierService }  from '../suplier.service';
 
 export class SuplierDetailComponent implements OnInit {
 
-  @Input() suplier : Suplier;
+  suplier : Suplier;
 
   constructor(
     private route: ActivatedRoute,
@@ -28,15 +27,13 @@ export class SuplierDetailComponent implements OnInit {
   getSuplier(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.suplierService.getSuplier(id)
-      .subscribe(suplier => this.suplier = suplier);
+      .subscribe(suplier => {
+        this.suplier = suplier;
+      });
   }
 
   goBack() : void {
     this.location.back();
   }
 
-  save(): void {
-    this.suplierService.updateSuplier(this.suplier)
-      .subscribe(() => this.goBack());
-  }
 }

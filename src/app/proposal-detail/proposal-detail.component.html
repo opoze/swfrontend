@@ -1,3 +1,46 @@
-<p>
-  proposal-detail works!
-</p>
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div class="col-md-6">
+      <div *ngIf="proposal">
+        <h4>Detalhes da proposta: {{proposal.name}}</h4>
+      </div>
+      <div *ngIf="!proposal">
+        <h4>Detalhes da proposta</h4>
+      </div>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+  </div>
+  </div>
+</div>
+
+<div *ngIf="proposal">
+
+  <table class="table">
+      <tr>
+        <td>Nome</td>
+        <td>Categoria</td>
+        <td>Fornecedor</td>
+        <td>Status</td>
+        <td>Data</td>
+        <td>Valor</td>
+        <td>Descrição</td>
+      </tr>
+      <tr>
+        <td>{{proposal.name}}</td>
+        <td>{{proposal.category.name}}</td>
+        <td>{{proposal.suplier.name}}</td>
+        <td *ngIf="proposal.status">{{proposal.status.status | statusPipe}}</td>
+        <td *ngIf="!proposal.status"></td>
+        <td>{{proposal.created_at | myDateTimePipe}}</td>
+        <td>{{proposal.value | moneyPipe}}</td>
+        <td>
+          <div style='word-break: break-all; word-wrap: break-word;'>
+            {{proposal.description}}
+          </div>
+        </td>
+      </tr>
+  </table>
+
+</div>

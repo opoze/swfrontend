@@ -40,6 +40,7 @@ export class CategoryEditComponent implements OnInit {
       .subscribe(() => {
         if(!this.categoryService.httpError){
           // form.resetForm();
+          this.location.back();
         }
     });
   }

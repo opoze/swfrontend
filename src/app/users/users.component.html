@@ -37,10 +37,10 @@
           </thead>
           <tbody>
             <tr *ngFor="let user of users">
-              <td *ngIf="selectedUserId!=user.id">{{user.name}}</td>
-              <td *ngIf="selectedUserId!=user.id">{{user.cpf | cpfPipe}}</td>
-              <td *ngIf="selectedUserId!=user.id">{{user.birth_date | myDatePipe}}</td>
-              <td *ngIf="selectedUserId!=user.id">{{user.perfil | perfilPipe }}</td>
+              <td>{{user.name}}</td>
+              <td>{{user.cpf | cpfPipe}}</td>
+              <td>{{user.birth_date | myDatePipe}}</td>
+              <td>{{user.perfil | perfilPipe }}</td>
               <td>
                 <button type="button" name="button" routerLink="/user/{{user.id}}" class="btn btn-primary">
                   Ver

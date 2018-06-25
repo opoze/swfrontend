@@ -34,15 +34,15 @@ export class AppComponent {
           ) ? 'active nav-link' : 'nav-link';
   }
 
-  isProposalsRouteActive(){
-    var viewLocation = location.pathname;
-    return (
-            viewLocation == '/proposals' ||
-            viewLocation.toString().match(/^(\/proposal)\/[\W\w]+/i) ||
-            viewLocation.toString().match(/^(\/proposal\/)[\W\w]+\/edit/i) ||
-            viewLocation == '/proposalcreate'
-          ) ? 'active nav-link' : 'nav-link';
-  }
+  // isProposalsRouteActive(){
+  //   var viewLocation = location.pathname;
+  //   return (
+  //           viewLocation == '/proposals' ||
+  //           viewLocation.toString().match(/^(\/proposal)\/[\W\w]+/i) ||
+  //           viewLocation.toString().match(/^(\/proposal\/)[\W\w]+\/edit/i) ||
+  //           viewLocation == '/proposalcreate'
+  //         ) ? 'active nav-link' : 'nav-link';
+  // }
 
   isCategoriesRouteActive(){
     var viewLocation = location.pathname;

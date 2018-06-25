@@ -1,3 +1,36 @@
-<p>
-  suplier-detail works!
-</p>
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div class="col-md-6">
+      <div *ngIf="suplier">
+        <h4>Detalhes do fornecedor {{suplier.name}}</h4>
+      </div>
+      <div *ngIf="!suplier">
+        <h4>Detalhes do fornecedor</h4>
+      </div>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+  </div>
+  </div>
+</div>
+
+<div *ngIf="suplier">
+
+  <table class="table">
+      <tr>
+        <td>Nome</td>
+        <td>CPF/CNPJ</td>
+        <td>Telefone</td>
+        <td>E-mail</td>
+      </tr>
+      <tr>
+        <td>{{suplier.name}}</td>
+        <td *ngIf="suplier.cpf">{{suplier.cpf | cpfPipe}}</td>
+        <td *ngIf="suplier.cnpj">{{suplier.cnpj | cnpjPipe}}</td>
+        <td>{{suplier.fone}}</td>
+        <td>{{suplier.email}}</td>
+      </tr>
+  </table>
+
+</div>

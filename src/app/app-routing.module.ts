@@ -11,9 +11,14 @@ import { CategoryDetailComponent } from './category-detail/category-detail.compo
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { CategoryCreateComponent } from './category-create/category-create.component';
 
-import { ProposalsComponent } from './proposals/proposals.component';
 import { SupliersComponent } from './supliers/supliers.component';
+import { SuplierDetailComponent } from './suplier-detail/suplier-detail.component';
+import { SuplierEditComponent } from './suplier-edit/suplier-edit.component';
+import { SuplierCreateComponent } from './suplier-create/suplier-create.component';
 
+
+import { ProposalsComponent } from './proposals/proposals.component';
+import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
 
 const routes: Routes = [
 
@@ -29,9 +34,14 @@ const routes: Routes = [
   { path: 'category/:id/edit', component: CategoryEditComponent },
   { path: 'categorycreate', component: CategoryCreateComponent },
 
+  // Categories routes
   { path: 'supliers', component: SupliersComponent },
-  { path: 'proposals', component: ProposalsComponent },
-  { path: 'categories', component: CategoriesComponent },
+  { path: 'suplier/:id', component: SuplierDetailComponent },
+  { path: 'suplier/:id/edit', component: SuplierEditComponent },
+  { path: 'supliercreate', component: SuplierCreateComponent },
+
+  { path: 'suplier/:id/proposals', component: ProposalsComponent },
+  { path: 'proposal/:id', component: ProposalDetailComponent },
 
   // Start route
   { path: '', redirectTo: '/users', pathMatch: 'full' }

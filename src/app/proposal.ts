@@ -1,10 +1,11 @@
 export class Proposal {
   id: number;
   name: string;
-  categoryId: number;
-  category: string;
-  supplierId: number;
-  supplier: string;
-  date: string;
+  category: object;
+  supplier: object;
+  status: object;
+  created_at: string;
   value: string;
+  file: string;
+  description: string;
 }
