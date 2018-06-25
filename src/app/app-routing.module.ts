@@ -5,12 +5,15 @@ import { UsersComponent } from './users/users.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserEditComponent } from './user-edit/user-edit.component';
 import { UserCreateComponent } from './user-create/user-create.component';
-import { ProposalsComponent } from './proposals/proposals.component';
-import { SupliersComponent } from './supliers/supliers.component';
 
 import { CategoriesComponent } from './categories/categories.component';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
+import { CategoryCreateComponent } from './category-create/category-create.component';
+
+import { ProposalsComponent } from './proposals/proposals.component';
+import { SupliersComponent } from './supliers/supliers.component';
+
 
 const routes: Routes = [
 
@@ -24,7 +27,7 @@ const routes: Routes = [
   { path: 'categories', component: CategoriesComponent },
   { path: 'category/:id', component: CategoryDetailComponent },
   { path: 'category/:id/edit', component: CategoryEditComponent },
-  // { path: 'categprycreate', component: CategoryCreateComponent },
+  { path: 'categorycreate', component: CategoryCreateComponent },
 
   { path: 'supliers', component: SupliersComponent },
   { path: 'proposals', component: ProposalsComponent },

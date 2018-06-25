@@ -76,7 +76,7 @@ export class CategoryService {
     return this.http.post<Category>(url, category, {headers: headers}).pipe(
       tap(
         data => {
-          this.messageService.add('Categoria alterado.', 'success');
+          this.messageService.add('Categoria alterada.', 'success');
           this.log(`updated category id=${category.id}`);
           this.loadingService.setLoading(false);
         },

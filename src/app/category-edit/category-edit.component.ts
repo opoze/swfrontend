@@ -14,13 +14,7 @@ import { NgForm } from '@angular/forms';
 
 export class CategoryEditComponent implements OnInit {
 
-  perfils = [
-    { id: '1', name: 'Analista De Compras'},
-    { id: '2', name: 'Analista Financeiro'},
-    { id: '3', name: 'Diretor Financeiro'}
-  ];
-
-  model : Category;
+  model : Category = null;
 
   constructor(
     private location: Location,

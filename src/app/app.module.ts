@@ -22,6 +22,8 @@ import { UserEditComponent } from './user-edit/user-edit.component';
 import { MyDatePipe } from './my-date-pipe.pipe';
 import { PerfilPipe } from './perfil-pipe.pipe';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
+import { TextMaxPipe } from './text-max.pipe';
+import { CategoryCreateComponent } from './category-create/category-create.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +43,9 @@ import { CategoryEditComponent } from './category-edit/category-edit.component';
     UserEditComponent,
     MyDatePipe,
     PerfilPipe,
-    CategoryEditComponent
+    CategoryEditComponent,
+    TextMaxPipe,
+    CategoryCreateComponent
   ],
   imports: [
     BrowserModule,

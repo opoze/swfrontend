@@ -36,7 +36,7 @@
           <tbody>
             <tr *ngFor="let category of categories">
               <td>{{category.name}}</td>
-              <td>{{category.description}}</td>
+              <td>{{category.description | textMax:20}}</td>
               <td>
                 <button type="button" name="button" routerLink="/category/{{category.id}}" class="btn btn-primary">
                   Ver
