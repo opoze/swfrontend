@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div>
+      <h4>Editar Tempo de Validade de Propostas</h4>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="model">
+
+  <form #proposaltimeForm="ngForm" (ngSubmit)="updateProposalTime(proposaltimeForm)">
+
+  <div class="form-group">
+    <label for="proposaltime">Horas</label>
+    <input type="text" minlength="1" maxlength="4" class="form-control" id="name" required [(ngModel)]="model.proposaltime" name="proposaltime" #proposaltime="ngModel" placeholder="Horas">
+      <div *ngIf="proposaltime.invalid && (proposaltime.dirty || proposaltime.touched)" class="alert alert-danger">
+        <div *ngIf="proposaltime.errors.required">
+          Informe as horas
+        </div>
+        <div *ngIf="proposaltime.errors.minlength">
+          Nome deve conter no mínimo 1 caravteres
+        </div>
+        <div *ngIf="proposaltime.errors.maxlength">
+          Nome deve ter no máximo 4 caracteres
+        </div>
+      </div>
+  </div>
+
+  <button type="submit" class="btn btn-success" [disabled]="!proposaltimeForm.form.valid">Salvar</button>
+  <button type="button" (click)="cancel()" class="btn light">Cancelar</button>
+</form>
+
+</div>

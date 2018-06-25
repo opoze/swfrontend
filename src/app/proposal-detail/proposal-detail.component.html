@@ -1,46 +1,69 @@
 <div class="container">
+
   <div class="row" style="margin:20px">
     <div class="col-md-6">
-      <div *ngIf="proposal">
-        <h4>Detalhes da proposta: {{proposal.name}}</h4>
+        <h4>Detralhes da proposta</h4>
       </div>
-      <div *ngIf="!proposal">
-        <h4>Detalhes da proposta</h4>
+      <div class="col-md-6 text-right">
+        <button class="btn btn-link" (click)="goBack()">Voltar</button>
       </div>
     </div>
-    <div class="col-md-5"></div>
-    <div class="col-md-1">
-      <button class="btn btn-link" (click)="goBack()">Voltar</button>
   </div>
-  </div>
-</div>
+
 
 <div *ngIf="proposal">
+  <div class="row">
 
-  <table class="table">
-      <tr>
-        <td>Nome</td>
-        <td>Categoria</td>
-        <td>Fornecedor</td>
-        <td>Status</td>
-        <td>Data</td>
-        <td>Valor</td>
-        <td>Descrição</td>
-      </tr>
-      <tr>
-        <td>{{proposal.name}}</td>
-        <td>{{proposal.category.name}}</td>
-        <td>{{proposal.suplier.name}}</td>
-        <td *ngIf="proposal.status">{{proposal.status.status | statusPipe}}</td>
-        <td *ngIf="!proposal.status"></td>
-        <td>{{proposal.created_at | myDateTimePipe}}</td>
-        <td>{{proposal.value | moneyPipe}}</td>
-        <td>
-          <div style='word-break: break-all; word-wrap: break-word;'>
-            {{proposal.description}}
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-header">
+          Proposta: {{proposal.name}}
+          Validade: {{proposaltime}}
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-sm-6 text-right"> <h6>Nome</h6> </div>
+            <div class="col-sm-6 text-left"> {{proposal.name}} </div>
+            <div class="col-sm-6 text-right"> <h6>Categoria</h6> </div>
+            <div class="col-sm-6 text-left"> {{proposal.category.name}} </div>
+            <div class="col-sm-6 text-right"><h6>Fornecedor</h6></div>
+            <div class="col-sm-6 text-left">{{proposal.suplier.name}}</div>
+            <div *ngIf="proposal.status" class="col-sm-6 text-right"><h6>Status</h6></div>
+            <div *ngIf="proposal.status" class="col-sm-6 text-left">{{proposal.status.status | statusPipe}}</div>
+            <div class="col-sm-6 text-right"><h6>Data</h6></div>
+            <div class="col-sm-6 text-left">{{proposal.created_at | myDateTimePipe}}</div>
+            <div class="col-sm-6 text-right"><h6>Valor</h6></div>
+            <div class="col-sm-6 text-left">{{proposal.value | moneyPipe}}</div>
+            <div class="col-sm-6 text-right"><h6>Descrição</h6></div>
+            <div class="col-sm-6 text-left"><div style='word-break: break-all; word-wrap: break-word;'>{{proposal.description}}</div>
+            </div>
           </div>
-        </td>
-      </tr>
-  </table>
+        </div>
+        <div class="card-footer">
+          <button *ngIf="proposal && suplier"type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}/edit" class="btn btn-primary">
+            Editar
+          </button>
+          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
+            Upload Arquivo
+          </button>
+          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
+            Download Arquivo
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-header">Histórico de Status</div>
+        <div class="card-body">Nada</div>
+        <div class="card-footer">
+          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
+            Alterar
+          </button>
+        </div>
+      </div>
+    </div>
 
+  </div>
 </div>

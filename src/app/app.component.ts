@@ -30,7 +30,8 @@ export class AppComponent {
             viewLocation == '/supliers' ||
             viewLocation.toString().match(/^(\/suplier)\/[\W\w]+/i) ||
             viewLocation.toString().match(/^(\/suplier\/)[\W\w]+\/edit/i) ||
-            viewLocation == '/supliercreate'
+            viewLocation == '/supliercreate' ||
+            viewLocation == '/proposaltime'
           ) ? 'active nav-link' : 'nav-link';
   }
 

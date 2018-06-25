@@ -19,6 +19,11 @@ import { SuplierCreateComponent } from './suplier-create/suplier-create.componen
 
 import { ProposalsComponent } from './proposals/proposals.component';
 import { ProposalDetailComponent } from './proposal-detail/proposal-detail.component';
+import { ProposalCreateComponent } from './proposal-create/proposal-create.component';
+import { ProposalEditComponent } from './proposal-edit/proposal-edit.component';
+
+
+import { ProposalTimeComponent } from './proposal-time/proposal-time.component';
 
 const routes: Routes = [
 
@@ -41,7 +46,13 @@ const routes: Routes = [
   { path: 'supliercreate', component: SuplierCreateComponent },
 
   { path: 'suplier/:id/proposals', component: ProposalsComponent },
-  { path: 'proposal/:id', component: ProposalDetailComponent },
+  { path: 'suplier/:id/proposal/:id1', component: ProposalDetailComponent },
+  { path: 'suplier/:id/proposalcreate', component: ProposalCreateComponent },
+  { path: 'suplier/:id/proposal/:id1/edit', component: ProposalEditComponent },
+
+
+  { path: 'proposaltime', component: ProposalTimeComponent },
+
 
   // Start route
   { path: '', redirectTo: '/users', pathMatch: 'full' }

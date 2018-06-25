@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Proposal } from './proposal';
+import { Config } from './config';
 import { Observable, of, fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
@@ -20,6 +21,7 @@ const httpOptions = {
 export class ProposalService {
 
   private proposalsUrl = 'http://127.0.0.1:8000/proposal';
+  private proposalTimeUrl = 'http://127.0.0.1:8000/proposaltime';
   private suplierProposalUrl = 'http://127.0.0.1:8000/proposals';
   private findUrl = 'http://127.0.0.1:8000/proposalfind';
   public httpError = false;
@@ -70,6 +72,24 @@ export class ProposalService {
     );
   }
 
+  getProposalTime(): Observable<Config> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    return this.http.get<Config>(this.proposalTimeUrl).pipe(
+      tap(
+        data => {
+          this.log('fetched proposal time');
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<Config>('getProposalTime'))
+    );
+  }
+
   updateProposal (proposal: Proposal): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
@@ -89,6 +109,27 @@ export class ProposalService {
         }
       ),
       catchError(this.handleError<any>('Atualizar proposta'))
+    );
+  }
+
+  updateProposalTime (proposaltime: Config): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.post<Config>(this.proposalTimeUrl, proposaltime, {headers: headers}).pipe(
+      tap(
+        data => {
+          this.messageService.add('Tempo de validade de proposta alterado.', 'success');
+          this.log(`updated proposal time `);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.messageService.add('Não foi possível alterar o tempo de validade de proposta.', 'danger');
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>('Atualizar tempo de validade de proposta'))
     );
   }
 

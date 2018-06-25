@@ -5,9 +5,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class MoneyPipePipe implements PipeTransform {
 
-  transform(value: number, args?: any): any {
+  transform(value: any, args?: any): any {
+
     let money = parseFloat(value).toFixed(2);
     return 'R$ ' + money.replace('.', ',');
+
   }
 
 }

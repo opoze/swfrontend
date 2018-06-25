@@ -30,6 +30,9 @@ import { SuplierEditComponent } from './suplier-edit/suplier-edit.component';
 import { MyDateTimePipe } from './my-date-time.pipe';
 import { StatusPipePipe } from './status-pipe.pipe';
 import { MoneyPipePipe } from './money-pipe.pipe';
+import { ProposalTimeComponent } from './proposal-time/proposal-time.component';
+import { ProposalCreateComponent } from './proposal-create/proposal-create.component';
+import { ProposalEditComponent } from './proposal-edit/proposal-edit.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +60,10 @@ import { MoneyPipePipe } from './money-pipe.pipe';
     SuplierEditComponent,
     MyDateTimePipe,
     StatusPipePipe,
-    MoneyPipePipe
+    MoneyPipePipe,
+    ProposalTimeComponent,
+    ProposalCreateComponent,
+    ProposalEditComponent
   ],
   imports: [
     BrowserModule,

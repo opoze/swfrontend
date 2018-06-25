@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Proposal } from '../proposal';
+import { Suplier } from '../suplier';
 import { ProposalService } from '../proposal.service';
+import { SuplierService } from '../suplier.service';
 
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-
-
 
 @Component({
   selector: 'app-proposals',
@@ -13,16 +13,18 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./proposals.component.css']
 })
 
-
 export class ProposalsComponent implements OnInit {
 
   proposals: Proposal[];
   loading: boolean;
   search: string;
   suplierName: string = '';
+  proposaltime: number = 0;
+  suplier: Suplier = null;
 
   constructor(
     private proposalService: ProposalService,
+    private suplierService: SuplierService,
     private location: Location,
     private route: ActivatedRoute
   ) { }
@@ -40,14 +42,29 @@ export class ProposalsComponent implements OnInit {
     });
   }
 
+  getProposalTime(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.proposalService.getProposalTime()
+      .subscribe(proposaltime => {
+        this.proposaltime = proposaltime.proposaltime;
+    });
+  }
+
+  getSuplier(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.suplierService.getSuplier(id)
+      .subscribe(suplier => {
+        this.suplier = suplier;
+    });
+  }
+
   getProposals(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.proposalService.getProposals(id)
       .subscribe(proposals => {
         this.proposals = proposals;
-        if(this.proposals.length > 0){
-          this.suplierName = this.proposals[0].suplier.name;
-        }
+        this.getSuplier();
+        this.getProposalTime();
       });
   }
 
