@@ -13,7 +13,6 @@
 
 <div *ngIf="proposal">
   <div class="row">
-
     <div class="col-sm-6">
       <div class="card">
         <div class="card-header">
@@ -39,31 +38,61 @@
             </div>
           </div>
         </div>
-        <div class="card-footer">
-          <button *ngIf="proposal && suplier"type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}/edit" class="btn btn-primary">
-            Editar
-          </button>
-          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
-            Upload Arquivo
-          </button>
-          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
-            Download Arquivo
-          </button>
-        </div>
       </div>
     </div>
-    
     <div class="col-sm-6">
       <div class="card">
         <div class="card-header">Histórico de Status</div>
-        <div class="card-body">Nada</div>
-        <div class="card-footer">
-          <button *ngIf="proposal && suplier"type="button" name="button" class="btn btn-primary">
-            Alterar
-          </button>
+        <div class="card-body">
+          <div *ngIf="proposalStatusHistory.length">
+            <table class="table table-striped">
+              <thead>
+                <th>Status</th>
+                <th>Em</th>
+                <th>Por</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let status of proposalStatusHistory">
+                  <td>
+                    {{status.status | statusPipe}}
+                  </td>
+                  <td>
+                    {{status.created_at}}
+                  </td>
+                  <td>
+                    {{status.user}}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+          </div>
+          <div *ngIf="!proposalStatusHistory.length">
+            Nenhum status
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
+  <div class="row" style='margin-top:20px;'>
+    <div *ngIf="proposal && suplier" class="col-sm-12">
+      <button type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}/edit" class="btn btn-primary">
+        Editar
+      </button>
+      <button type="button" name="button" class="btn btn-primary">
+        Upload Arquivo
+      </button>
+      <button ype="button" name="button" class="btn btn-primary">
+        Download Arquivo
+      </button>
+      <button (click)="approveProposal()" [disabled]="proposal.status.status=='A'" type="button" name="button" class="btn btn-success">
+        Aprovar
+      </button>
+      <button (click)="reproveProposal()" [disabled]="proposal.status.status=='R'" type="button" name="button" class="btn btn-danger">
+        Reprovar
+      </button>
+    </div>
   </div>
 </div>

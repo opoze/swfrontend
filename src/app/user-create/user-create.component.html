@@ -29,7 +29,7 @@
   </div>
 
   <div class="form-group">
-    <label for="name">CPF</label>
+    <label for="cpf">CPF</label>
     <input mask="000.000.000-00" [dropSpecialCharacters]="false" minlength="14" maxlength="14" type="text" class="form-control" id="cpf" required [(ngModel)]="model.cpf" name="cpf" cpf="ngModel" placeholder="CPF" #cpf="ngModel">
       <div *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)" class="alert alert-danger">
         <div *ngIf="cpf.errors.required">
@@ -45,7 +45,7 @@
   </div>
 
   <div class="form-group">
-    <label for="name">Data De Nascimento</label>
+    <label for="date">Data De Nascimento</label>
     <input mask="00/00/0000" minlength="10" maxlength="10" [dropSpecialCharacters]="false" type="text" class="form-control" id="birth_date" required [(ngModel)]="model.birth_date" name="birth_date" #birth_date="ngModel" placeholder="Data de Nascimento" #date="ngModel">
     <div *ngIf="date.invalid && (date.dirty || date.touched)" class="alert alert-danger">
         <div *ngIf="date.errors.required">
@@ -61,7 +61,7 @@
   </div>
 
   <div class="form-group">
-    <label for="name">Perfil</label>
+    <label for="perfil">Perfil</label>
     <select [(ngModel)]="selectedPerfil" required name="perfil" #perfil="ngModel" class="form-control">
       <option *ngFor="let perfil of perfils" [value]="perfil">{{perfil.name}}</option>
     </select>

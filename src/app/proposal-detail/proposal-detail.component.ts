@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { Proposal } from '../proposal';
 import { Suplier } from '../suplier';
+import { Status } from '../status';
 import { ProposalService }  from '../proposal.service';
 import { SuplierService }  from '../suplier.service';
 
@@ -16,9 +17,10 @@ export class ProposalDetailComponent implements OnInit {
 
   proposal : Proposal;
   proposaltime : number = null;
+  proposalStatusHistory : Status[] = [];
   suplier : Suplier = null;
-
   constructor(
+
     private route: ActivatedRoute,
     private proposalService: ProposalService,
     private suplierService: SuplierService,
@@ -30,10 +32,45 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   getProposalTime(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
+    // const id = +this.route.snapshot.paramMap.get('id');
     this.proposalService.getProposalTime()
       .subscribe(proposaltime => {
         this.proposaltime = proposaltime.proposaltime;
+    });
+  }
+
+  getProposalStatusHistory(): void {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.getProposalStatusHistory(id)
+      .subscribe(proposalStatusHistory => {
+        this.proposalStatusHistory = proposalStatusHistory;
+    });
+  }
+
+  setProposalStatus(status: Status){
+    this.proposal.status = status;
+  }
+
+  approveProposal(): void {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.approveProposal(id)
+      .subscribe(proposalStatusHistory => {
+        console.log(proposalStatusHistory);
+        if(proposalStatusHistory.length > 0){
+          this.setProposalStatus(proposalStatusHistory[0]);
+        }
+        this.proposalStatusHistory = proposalStatusHistory;
+    });
+  }
+
+  reproveProposal(): void {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.reproveProposal(id)
+      .subscribe(proposalStatusHistory => {
+        if(proposalStatusHistory.length > 0){
+          this.setProposalStatus(proposalStatusHistory[0]);
+        }
+        this.proposalStatusHistory = proposalStatusHistory;
     });
   }
 
@@ -44,6 +81,7 @@ export class ProposalDetailComponent implements OnInit {
         this.proposal = proposal;
         this.getProposalTime();
         this.getSuplier();
+        this.getProposalStatusHistory();
       });
   }
 

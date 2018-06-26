@@ -33,6 +33,7 @@ import { MoneyPipePipe } from './money-pipe.pipe';
 import { ProposalTimeComponent } from './proposal-time/proposal-time.component';
 import { ProposalCreateComponent } from './proposal-create/proposal-create.component';
 import { ProposalEditComponent } from './proposal-edit/proposal-edit.component';
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { ProposalEditComponent } from './proposal-edit/proposal-edit.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    CurrencyMaskModule
   ],
   providers: [
     MyDatePipe,
