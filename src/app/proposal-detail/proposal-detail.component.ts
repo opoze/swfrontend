@@ -6,6 +6,8 @@ import { Suplier } from '../suplier';
 import { Status } from '../status';
 import { ProposalService }  from '../proposal.service';
 import { SuplierService }  from '../suplier.service';
+import { ViewChild } from '@angular/core';
+
 
 @Component({
   selector: 'app-proposal-detail',
@@ -15,13 +17,16 @@ import { SuplierService }  from '../suplier.service';
 
 export class ProposalDetailComponent implements OnInit {
 
+  @ViewChild('inputFile')
+  inputFile: any;
+
   proposal : Proposal;
   proposaltime : number = null;
   proposalStatusHistory : Status[] = [];
   suplier : Suplier = null;
   showFileUpload: boolean = false;
-  constructor(
 
+  constructor(
     private route: ActivatedRoute,
     private proposalService: ProposalService,
     private suplierService: SuplierService,
@@ -33,18 +38,27 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   getProposalTime(): void {
-    // const id = +this.route.snapshot.paramMap.get('id');
     this.proposalService.getProposalTime()
       .subscribe(proposaltime => {
         this.proposaltime = proposaltime.proposaltime;
     });
-  }]
+  }
 
-  uploadFile(files: fileLIst) {
+  uploadFile(files: FileList) {
     const id = +this.route.snapshot.paramMap.get('id1');
     this.proposalService.uploadFile(id, files.item(0))
     .subscribe(() => {
       this.proposal.file = files.item(0).name;
+      this.inputFile.nativeElement.value = "";
+    });
+  }
+
+  downloadFile() {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.downloadFile(id)
+    .subscribe((file) => {
+      let fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
     });
   }
 
@@ -104,6 +118,24 @@ export class ProposalDetailComponent implements OnInit {
 
   goBack() : void {
     this.location.back();
+  }
+
+  canNotApprove(){
+    if(this.proposal){
+      if(this.proposal.status){
+        return this.proposal.status.status == 'A';
+      }
+    }
+    return false;
+  }
+
+  canNotReprove(){
+    if(this.proposal){
+      if(this.proposal.status){
+        return this.proposal.status.status == 'R';
+      }
+    }
+    return false;
   }
 
 }

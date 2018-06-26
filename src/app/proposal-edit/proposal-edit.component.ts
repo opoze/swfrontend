@@ -3,15 +3,19 @@ import { Location } from '@angular/common';
 import { Component, OnInit, Input } from '@angular/core';
 import { Proposal } from '../proposal';
 import { Suplier } from '../suplier';
+import { Category } from '../category';
 import { ProposalService }  from '../proposal.service';
 // import { SuplierService }  from '../suplier.service';
 import { CategoryService }  from '../category.service';
+import { NgForm } from '@angular/forms';
+
 
 @Component({
   selector: 'app-proposal-edit',
   templateUrl: './proposal-edit.component.html',
-  styleUrls: ['./proposal-edit.component.css'
+  styleUrls: ['./proposal-edit.component.css']
 })
+
 export class ProposalEditComponent implements OnInit {
 
   suplier : Suplier = null;
@@ -56,16 +60,7 @@ export class ProposalEditComponent implements OnInit {
   }
 
   updateProposal(form: NgForm){
-
-    let aux = {...this.model};
-    aux.category = this.model.category.id;
-    aux.suplier = this.suplier.id;
-    delete aux.status;
-    delete aux.created_at;
-    delete aux.updated_at;
-    delete aux.file;
-
-    this.proposalService.updateProposal(aux)
+    this.proposalService.updateProposal(this.model)
       .subscribe(() => {
         if(!this.proposalService.httpError){
           form.resetForm();

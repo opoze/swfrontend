@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Proposal } from '../proposal';
 import { Suplier } from '../suplier';
+import { Category } from '../category';
 import { ProposalService } from '../proposal.service';
 import { CategoryService } from '../category.service';
 import { SuplierService } from '../suplier.service';
@@ -47,7 +48,7 @@ export class ProposalCreateComponent implements OnInit {
   getSuplier(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.suplierService.getSuplier(id)
-      .subscribe(suplier => {
+      .subscribe((suplier: Suplier) => {
         this.suplier = suplier;
         if(suplier){
           this.model.suplier = suplier;
@@ -56,12 +57,7 @@ export class ProposalCreateComponent implements OnInit {
   }
 
   storeProposal(form: NgForm){
-
-    let aux = {...this.model};
-    aux.category = this.model.category.id;
-    aux.suplier = this.suplier.id;
-
-    this.proposalService.storeProposal(aux)
+    this.proposalService.storeProposal(this.model)
       .subscribe(() => {
         if(!this.proposalService.httpError){
           form.resetForm();

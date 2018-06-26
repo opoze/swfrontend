@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpClient, HttpHeaders, HttpRequest, HttpEventType } from '@angular/common/http';
 import { Proposal } from './proposal';
 import { Config } from './config';
 import { Status } from './status';
@@ -26,8 +26,10 @@ export class ProposalService {
   private suplierProposalUrl = 'http://127.0.0.1:8000/proposals';
   private findUrl = 'http://127.0.0.1:8000/proposalfind';
   private proposalUploadFileUrl = 'http://127.0.0.1:8000/proposaluploadfile';
+  private proposalDownloadFileUrl = 'http://127.0.0.1:8000/proposaldownloadfile';
   public httpError = false;
   public loadingProposalsError = false;
+  public uploadProgress: number = 0;
 
   constructor(
     private http: HttpClient,
@@ -107,7 +109,7 @@ export class ProposalService {
           this.loadingService.setLoading(false);
         }
       ),
-      catchError(this.handleError<Config>('getProposalStatusHistory'))
+      catchError(this.handleError<Status[]>('getProposalStatusHistory'))
     );
   }
 
@@ -160,19 +162,22 @@ export class ProposalService {
   /** Return distinct message for sent, upload progress, & response events */
   private getEventMessage(event: HttpEvent<any>, file: File) {
     switch (event.type) {
-      case HttpEventType.Sent:
-        return `Uploading file "${file.name}" of size ${file.size}.`;
+      case HttpEventType.Sent: {
+        const sizeInMb = (file.size / 1024).toFixed(2);
+        this.messageService.add(`Enviando arquivo: "${file.name}", tamanho: ${sizeInMb}KB.`, 'info');
+        break;
+      }
+      case HttpEventType.UploadProgress:{
+        this.uploadProgress = Math.round(100 * event.loaded / event.total);
+        break;
+      }
 
-      case HttpEventType.UploadProgress:
-        // Compute and show the % done:
-        const percentDone = Math.round(100 * event.loaded / event.total);
-        return `File "${file.name}" is ${percentDone}% uploaded.`;
-
-      case HttpEventType.Response:
-        return `File "${file.name}" was completely uploaded!`;
-
+      case HttpEventType.Response:{
+        this.messageService.add(`Arquivo "${file.name}" foi enviando!`, 'success');
+        break;
+      }
       default:
-        return `File "${file.name}" surprising upload event: ${event.type}.`;
+        return;
     }
   }
 
@@ -193,19 +198,52 @@ export class ProposalService {
     // Return Observable
     return this.http.request(req).pipe(
       map(event => this.getEventMessage(event, file)),
-      tap(message => this.showProgress(message)),
+      // tap(message => this.showProgress(message)),
       last(),
       catchError(this.handleError('Upload de arquivo'))
     );
 
-  }''
+  }
+
+  downloadFile(id: number): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const url = `${this.proposalDownloadFileUrl}/${id}`;
+    // let headers = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.get<any>(url, { responseType: 'blob' }).pipe(
+      tap(
+        data => {
+          this.log(`fetched proposal file id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>(`downloadFile id=${id}`))
+    );
+  }
+
 
   updateProposal (proposal: Proposal): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.proposalsUrl}/${proposal.id}`;
-    return this.http.post<Proposal>(url, proposal, {headers: headers}).pipe(
+
+    // Parse data to API
+    let aux = {
+      id: proposal.id,
+      name: proposal.name,
+      category: proposal.category.id,
+      suplier: proposal.suplier.id,
+      value: proposal.value,
+      description: proposal.description
+    }
+
+
+    return this.http.post<Proposal>(url, aux, {headers: headers}).pipe(
       tap(
         data => {
           this.messageService.add('Proposta alterado.', 'success');
@@ -249,7 +287,18 @@ export class ProposalService {
     this.httpError = false;
     let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.proposalsUrl}`;
-    return this.http.post<Proposal>(url, proposal, {headers: headers}).pipe(
+
+    // Parse data to API
+    let aux = {
+      id: proposal.id,
+      name: proposal.name,
+      category: proposal.category.id,
+      suplier: proposal.suplier.id,
+      value: proposal.value,
+      description: proposal.description
+    }
+
+    return this.http.post<Proposal>(url, aux, {headers: headers}).pipe(
       tap(
         data => {
           this.messageService.add('Proposta inserida.', 'success');

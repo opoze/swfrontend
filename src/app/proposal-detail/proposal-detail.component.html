@@ -37,7 +37,7 @@
             <div class="col-sm-6 text-right"><h6>Descrição</h6></div>
             <div class="col-sm-6 text-left"><div style='word-break: break-all; word-wrap: break-word;'>{{proposal.description}}</div></div>
             <div class="col-sm-6 text-right"><h6>Arquivo</h6></div>
-            <div class="col-sm-6 text-right">{{proposal.file}}</div>
+            <div class="col-sm-6 text-left">{{proposal.file}}</div>
           </div>
         </div>
         <div class="card-footer">
@@ -98,13 +98,13 @@
       <button type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}/edit" class="btn btn-primary">
         Editar
       </button>
-      <button ype="button" name="button" class="btn btn-primary">
+      <button type="button" name="button" class="btn btn-primary" (click)="downloadFile()">
         Visualizar Arquivo
       </button>
-      <button (click)="approveProposal()" [disabled]="proposal.status.status=='A'" type="button" name="button" class="btn btn-success">
+      <button (click)="approveProposal()" [disabled]="canNotApprove()" type="button" name="button" class="btn btn-success">
         Aprovar
       </button>
-      <button (click)="reproveProposal()" [disabled]="proposal.status.status=='R'" type="button" name="button" class="btn btn-danger">
+      <button (click)="reproveProposal()" [disabled]="canNotReprove()" type="button" name="button" class="btn btn-danger">
         Reprovar
       </button>
     </div>
