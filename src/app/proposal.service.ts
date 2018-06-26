@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEventType } from '@angular/common/http';
 import { Proposal } from './proposal';
 import { Config } from './config';
 import { Status } from './status';
 import { Observable, of, fromEvent } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
-import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { last, tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { LoadingService } from './loading.service'
 
 // const searchBox = document.getElementById('search_box');
@@ -25,6 +25,7 @@ export class ProposalService {
   private proposalStatusHistoryUrl = 'http://127.0.0.1:8000/proposalstatushistory';
   private suplierProposalUrl = 'http://127.0.0.1:8000/proposals';
   private findUrl = 'http://127.0.0.1:8000/proposalfind';
+  private proposalUploadFileUrl = 'http://127.0.0.1:8000/proposaluploadfile';
   public httpError = false;
   public loadingProposalsError = false;
 
@@ -154,6 +155,51 @@ export class ProposalService {
     );
   }
 
+
+
+  /** Return distinct message for sent, upload progress, & response events */
+  private getEventMessage(event: HttpEvent<any>, file: File) {
+    switch (event.type) {
+      case HttpEventType.Sent:
+        return `Uploading file "${file.name}" of size ${file.size}.`;
+
+      case HttpEventType.UploadProgress:
+        // Compute and show the % done:
+        const percentDone = Math.round(100 * event.loaded / event.total);
+        return `File "${file.name}" is ${percentDone}% uploaded.`;
+
+      case HttpEventType.Response:
+        return `File "${file.name}" was completely uploaded!`;
+
+      default:
+        return `File "${file.name}" surprising upload event: ${event.type}.`;
+    }
+  }
+
+  showProgress(message){
+    this.messageService.add(message, 'info');
+  }
+
+  uploadFile (id: number, file: File): Observable<any> {
+    //FormData
+    let formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+
+    //Request
+    const req = new HttpRequest('POST', `${this.proposalUploadFileUrl}/${id}`, formData, {
+      reportProgress: true
+    });
+
+    // Return Observable
+    return this.http.request(req).pipe(
+      map(event => this.getEventMessage(event, file)),
+      tap(message => this.showProgress(message)),
+      last(),
+      catchError(this.handleError('Upload de arquivo'))
+    );
+
+  }''
+
   updateProposal (proposal: Proposal): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
@@ -175,6 +221,7 @@ export class ProposalService {
       catchError(this.handleError<any>('Atualizar proposta'))
     );
   }
+
 
   updateProposalTime (proposaltime: Config): Observable<any> {
     this.loadingService.setLoading(true);

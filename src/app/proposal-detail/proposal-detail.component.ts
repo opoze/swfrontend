@@ -19,6 +19,7 @@ export class ProposalDetailComponent implements OnInit {
   proposaltime : number = null;
   proposalStatusHistory : Status[] = [];
   suplier : Suplier = null;
+  showFileUpload: boolean = false;
   constructor(
 
     private route: ActivatedRoute,
@@ -36,6 +37,14 @@ export class ProposalDetailComponent implements OnInit {
     this.proposalService.getProposalTime()
       .subscribe(proposaltime => {
         this.proposaltime = proposaltime.proposaltime;
+    });
+  }]
+
+  uploadFile(files: fileLIst) {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.uploadFile(id, files.item(0))
+    .subscribe(() => {
+      this.proposal.file = files.item(0).name;
     });
   }
 

@@ -1,15 +1,86 @@
-import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
+import { Component, OnInit, Input } from '@angular/core';
+import { Proposal } from '../proposal';
+import { Suplier } from '../suplier';
+import { ProposalService }  from '../proposal.service';
+// import { SuplierService }  from '../suplier.service';
+import { CategoryService }  from '../category.service';
 
 @Component({
   selector: 'app-proposal-edit',
   templateUrl: './proposal-edit.component.html',
-  styleUrls: ['./proposal-edit.component.css']
+  styleUrls: ['./proposal-edit.component.css'
 })
 export class ProposalEditComponent implements OnInit {
 
-  constructor() { }
+  suplier : Suplier = null;
+  categories: Category[];
+  model: Proposal = new Proposal();
+
+  constructor(
+    private proposalService: ProposalService,
+    private categoryService: CategoryService,
+    private location: Location,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
+    this.getCategories();
   }
+
+  getCategories(): void {
+    this.categoryService.getCategories()
+      .subscribe(categories => {
+        this.categories = categories;
+        if(categories.length > 0){
+          this.model.category = categories[0];
+          this.getProposal();
+        }
+      });
+  }
+
+  getProposal(): void {
+    const id = +this.route.snapshot.paramMap.get('id1');
+    this.proposalService.getProposal(id)
+      .subscribe(proposal => {
+        let categoryId = proposal.category.id;
+
+        proposal.category = this.categories.find((category)=>{
+          return category.id == categoryId;
+        })
+
+        this.model = proposal;
+        this.suplier = proposal.suplier;
+      });
+  }
+
+  updateProposal(form: NgForm){
+
+    let aux = {...this.model};
+    aux.category = this.model.category.id;
+    aux.suplier = this.suplier.id;
+    delete aux.status;
+    delete aux.created_at;
+    delete aux.updated_at;
+    delete aux.file;
+
+    this.proposalService.updateProposal(aux)
+      .subscribe(() => {
+        if(!this.proposalService.httpError){
+          form.resetForm();
+          this.location.back();
+        }
+    });
+  }
+
+  cancel(): void{
+    this.goBack();
+  }
+
+  goBack() : void {
+    this.location.back();
+  }
+
 
 }

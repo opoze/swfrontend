@@ -7,9 +7,6 @@ import * as moment from 'moment';
 export class MyDateTimePipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
-
-    console.log(value);
-
     let myMoment: moment.Moment = moment(value);
     return myMoment.format('DD/MM/YYYY HH:mm:ss');
   }

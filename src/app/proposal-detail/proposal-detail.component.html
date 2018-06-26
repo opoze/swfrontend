@@ -12,6 +12,7 @@
 
 
 <div *ngIf="proposal">
+
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
@@ -34,9 +35,25 @@
             <div class="col-sm-6 text-right"><h6>Valor</h6></div>
             <div class="col-sm-6 text-left">{{proposal.value | moneyPipe}}</div>
             <div class="col-sm-6 text-right"><h6>Descrição</h6></div>
-            <div class="col-sm-6 text-left"><div style='word-break: break-all; word-wrap: break-word;'>{{proposal.description}}</div>
+            <div class="col-sm-6 text-left"><div style='word-break: break-all; word-wrap: break-word;'>{{proposal.description}}</div></div>
+            <div class="col-sm-6 text-right"><h6>Arquivo</h6></div>
+            <div class="col-sm-6 text-right">{{proposal.file}}</div>
+          </div>
+        </div>
+        <div class="card-footer">
+
+          <div class="row">
+            <div class="col-sm-12">
+              <h6>Upload de arquivo de proposta</h6>
             </div>
           </div>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <input #inputFile type="file" id="file" (change)="uploadFile($event.target.files)">
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -81,11 +98,8 @@
       <button type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}/edit" class="btn btn-primary">
         Editar
       </button>
-      <button type="button" name="button" class="btn btn-primary">
-        Upload Arquivo
-      </button>
       <button ype="button" name="button" class="btn btn-primary">
-        Download Arquivo
+        Visualizar Arquivo
       </button>
       <button (click)="approveProposal()" [disabled]="proposal.status.status=='A'" type="button" name="button" class="btn btn-success">
         Aprovar

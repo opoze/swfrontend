@@ -1,3 +1,92 @@
-<p>
-  proposal-edit works!
-</p>
+<div class="container">
+  <div class="row" style="margin:20px">
+    <div *ngIf="suplier" class="col-md-6">
+      <h4>Editar Proposta: {{model.name}}, fornecedor: {{suplier.name}}</h4>
+    </div>
+    <div *ngIf="!suplier" class="col-md-6">
+      <h4>Editar proposta</h4>
+    </div>
+    <div class="col-md-5"></div>
+    <div class="col-md-1">
+      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<form #proposalForm="ngForm" (ngSubmit)="updateProposal(proposalForm)">
+
+  <div class="form-group">
+    <label for="name">Nome</label>
+    <input type="text" minlength="4" maxlength="255" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel" placeholder="Nome">
+      <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+        <div *ngIf="name.errors.required">
+          Informe um nome
+        </div>
+        <div *ngIf="name.errors.minlength">
+          Nome deve conter no mínimo 4 caravteres
+        </div>
+        <div *ngIf="name.errors.maxlength">
+          nome deve ter no máximo 255 caracteres
+        </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <label for="value">Valor</label>
+    <input
+      currencyMask
+      type="text"
+      min="0"
+      max="1000000"
+      class="form-control"
+      id="value"
+      required [(ngModel)]="model.value"
+      name="value"
+      #value="ngModel"
+      placeholder="Valor"
+      [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left', allowNegative: false }"
+    >
+      <div *ngIf="value.invalid && (value.dirty || value.touched)" class="alert alert-danger">
+        <div *ngIf="value.errors.required">
+          Informe um valor
+        </div>
+        <div *ngIf="value.errors.min">
+          Valor deve ser entre R$ 0,00 e R$ 1.000.000,00
+        </div>
+        <div *ngIf="value.errors.max">
+          Valor deve ser entre R$ 0,00 e R$ 1.000.000,00
+        </div>
+      </div>
+  </div>
+
+  <div class="form-group">
+    <label for="category">Categoria</label>
+    <select [(ngModel)]="model.category" required name="category" #category="ngModel" class="form-control">
+      <option *ngFor="let category of categories" [ngValue]="category">{{category.name}}</option>
+    </select>
+    <div *ngIf="category.invalid && (category.dirty || category.touched)" class="alert alert-danger">
+      Informe uma categoria
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Descrição</label>
+    <textarea minlength="10" maxlength="1000" type="text" class="form-control" id="description" required [(ngModel)]="model.description" name="description" description="ngModel" placeholder="Descrição" #description="ngModel">
+    </textarea>
+      <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger">
+        <div *ngIf="description.errors.required">
+          Informe uma descrição
+        </div>
+        <div *ngIf="description.errors.minlength">
+          Descrição deve conter 10 caracteres
+        </div>
+        <div *ngIf="description.errors.maxlength">
+          Descrição deve ter no 1000 caracteres
+        </div>
+      </div>
+  </div>
+
+
+  <button type="submit" class="btn btn-success" [disabled]="!proposalForm.form.valid">Salvar</button>
+  <button type="button" (click)="cancel()" class="btn light">Cancelar</button>
+</form>
