@@ -1,0 +1,28 @@
+<div class="container" >
+    <div class="panel panel-default" style="width:400px; margin:auto;">
+
+      <div class="panel-heading">
+	    	<h3 class="panel-title">LOGIN</h3>
+	 	  </div>
+
+      <div class="panel-body">
+
+        <form #loginForm="ngForm" (ngSubmit)="doLogin(loginForm)">
+
+          <fieldset>
+	    	  	<div class="form-group">
+	    		    <input required [(ngModel)]="login" class="form-control" placeholder="E-mail" name="email" type="text">
+	    		  </div>
+  	    		<div class="form-group">
+  	    			<input required [(ngModel)]="password" class="form-control" placeholder="Password" name="password" type="password" value="">
+  	    		</div>
+	    		  <button class="btn btn-lg btn-success btn-block" [disabled]="!loginForm.form.valid" type="submit">
+              Login
+            </button>
+	    	  </fieldset>
+	      </form>
+	    </div>
+
+	  </div>
+
+</div>

@@ -57,8 +57,10 @@ export class ProposalDetailComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id1');
     this.proposalService.downloadFile(id)
     .subscribe((file) => {
-      let fileURL = URL.createObjectURL(file);
-      window.open(fileURL);
+      if(!this.proposalService.httpError){
+        let fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
+      }
     });
   }
 

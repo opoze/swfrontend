@@ -6,7 +6,7 @@ import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
 import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { LoadingService } from './loading.service'
-
+import { AuthService } from './auth.service'
 
 // const searchBox = document.getElementById('search_box');
 const httpOptions = {
@@ -27,13 +27,19 @@ export class UserService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private authService: AuthService
   ) { }
+
+  headers: HttpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', this.authService.token);
+
 
   getUsers(): Observable<User[]> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    return this.http.get<User[]>(this.usersUrl)
+    return this.http.get<User[]>(this.usersUrl, {headers: this.headers})
     .pipe(
       tap(
         data => {
@@ -53,7 +59,7 @@ export class UserService {
     this.loadingService.setLoading(true);
     this.httpError = false;
     const url = `${this.usersUrl}/${id}`;
-    return this.http.get<User>(url).pipe(
+    return this.http.get<User>(url, {headers: this.headers}).pipe(
       tap(
         data => {
           this.log(`fetched user id=${id}`);
@@ -71,9 +77,8 @@ export class UserService {
   updateUser (user: User): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.usersUrl}/${user.id}`;
-    return this.http.post<User>(url, user, {headers: headers}).pipe(
+    return this.http.post<User>(url, user, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Usuário alterado.', 'success');
@@ -93,9 +98,8 @@ export class UserService {
   storeUser (user: User): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.usersUrl}`;
-    return this.http.post<User>(url, user, {headers: headers}).pipe(
+    return this.http.post<User>(url, user, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Usuário inserido.', 'success');
@@ -123,7 +127,7 @@ export class UserService {
       distinctUntilChanged(),
       // switchMap((term) => ajax(url+term)),
       switchMap(
-        (term) => this.http.get<User[]>(url+term).pipe(
+        (term) => this.http.get<User[]>(url+term, {headers: this.headers}).pipe(
           tap(
             data => {
               this.log(`fetched users`);

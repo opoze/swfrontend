@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {Location} from '@angular/common';
+import { Location } from '@angular/common';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,8 @@ export class AppComponent {
   title = 'SafeWeb Test';
 
   constructor(
-    private location:Location
+    private location: Location,
+    private authService: AuthService
   ) {}
 
   isUsersRouteActive(){

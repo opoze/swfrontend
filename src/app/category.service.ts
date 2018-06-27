@@ -6,12 +6,7 @@ import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
 import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { LoadingService } from './loading.service'
-
-
-// const searchBox = document.getElementById('search_box');
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { AuthService } from './auth.service'
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +22,18 @@ export class CategoryService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private authService: AuthService
   ) { }
+
+  headers: HttpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', this.authService.token);
 
   getCategories(): Observable<Category[]> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    return this.http.get<Category[]>(this.categoriesUrl)
+    return this.http.get<Category[]>(this.categoriesUrl, {headers: this.headers})
     .pipe(
       tap(
         data => {
@@ -53,7 +53,7 @@ export class CategoryService {
     this.loadingService.setLoading(true);
     this.httpError = false;
     const url = `${this.categoriesUrl}/${id}`;
-    return this.http.get<Category>(url).pipe(
+    return this.http.get<Category>(url, {headers: this.headers}).pipe(
       tap(
         data => {
           this.log(`fetched catgory id=${id}`);
@@ -71,9 +71,8 @@ export class CategoryService {
   updateCategory (category: Category): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.categoriesUrl}/${category.id}`;
-    return this.http.post<Category>(url, category, {headers: headers}).pipe(
+    return this.http.post<Category>(url, category, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Categoria alterada.', 'success');
@@ -93,9 +92,8 @@ export class CategoryService {
   storeCategory (category: Category): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.categoriesUrl}`;
-    return this.http.post<Category>(url, category, {headers: headers}).pipe(
+    return this.http.post<Category>(url, category, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Categoria inserida.', 'success');
@@ -123,7 +121,7 @@ export class CategoryService {
       distinctUntilChanged(),
       // switchMap((term) => ajax(url+term)),
       switchMap(
-        (term) => this.http.get<Category[]>(url+term).pipe(
+        (term) => this.http.get<Category[]>(url+term, {headers: this.headers}).pipe(
           tap(
             data => {
               this.log(`fetched categories`);

@@ -6,12 +6,7 @@ import { ajax } from 'rxjs/ajax';
 import { MessageService } from './message.service';
 import { tap, catchError, map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { LoadingService } from './loading.service'
-
-
-// const searchBox = document.getElementById('search_box');
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+import { AuthService } from './auth.service'
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +22,18 @@ export class SuplierService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private authService: AuthService
   ) { }
+
+  headers: HttpHeaders = new HttpHeaders()
+    .set('Content-Type', 'application/json')
+    .set('Authorization', this.authService.token);
 
   getSupliers(): Observable<Suplier[]> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    return this.http.get<Suplier[]>(this.supliersUrl)
+    return this.http.get<Suplier[]>(this.supliersUrl, {headers: this.headers})
     .pipe(
       tap(
         data => {
@@ -53,7 +53,7 @@ export class SuplierService {
     this.loadingService.setLoading(true);
     this.httpError = false;
     const url = `${this.supliersUrl}/${id}`;
-    return this.http.get<Suplier>(url).pipe(
+    return this.http.get<Suplier>(url, {headers: this.headers}).pipe(
       tap(
         data => {
           this.log(`fetched suplier id=${id}`);
@@ -71,9 +71,8 @@ export class SuplierService {
   updateSuplier (suplier: Suplier): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.supliersUrl}/${suplier.id}`;
-    return this.http.post<Suplier>(url, suplier, {headers: headers}).pipe(
+    return this.http.post<Suplier>(url, suplier, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Fornecedor alterado.', 'success');
@@ -93,9 +92,8 @@ export class SuplierService {
   storeSuplier (suplier: Suplier): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;
-    let headers = new HttpHeaders().set('Content-Type', 'application/json')
     const url = `${this.supliersUrl}`;
-    return this.http.post<Suplier>(url, suplier, {headers: headers}).pipe(
+    return this.http.post<Suplier>(url, suplier, {headers: this.headers}).pipe(
       tap(
         data => {
           this.messageService.add('Fornecedor inserido.', 'success');
@@ -123,7 +121,7 @@ export class SuplierService {
       distinctUntilChanged(),
       // switchMap((term) => ajax(url+term)),
       switchMap(
-        (term) => this.http.get<Suplier[]>(url+term).pipe(
+        (term) => this.http.get<Suplier[]>(url+term, {headers: this.headers}).pipe(
           tap(
             data => {
               this.log(`fetched supliers`);

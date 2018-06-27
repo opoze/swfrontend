@@ -34,6 +34,7 @@ import { ProposalTimeComponent } from './proposal-time/proposal-time.component';
 import { ProposalCreateComponent } from './proposal-create/proposal-create.component';
 import { ProposalEditComponent } from './proposal-edit/proposal-edit.component';
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
     MoneyPipePipe,
     ProposalTimeComponent,
     ProposalCreateComponent,
-    ProposalEditComponent
+    ProposalEditComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
