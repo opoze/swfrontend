@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service'
 import { NgForm } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -13,14 +14,20 @@ export class LoginComponent implements OnInit {
   password: string = '';
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private location: Location
   ) { }
 
   ngOnInit() {
   }
 
   doLogin(form: NgForm){
-    this.authService.login(this.login, this.password).subscribe(() => {});
+    this.authService.login(this.login, this.password).subscribe(() => {
+      if(!this.authService.httpError){
+        window.location.href='/users';
+      }
+      // this.location.path('/users');
+    });
   }
 
 }

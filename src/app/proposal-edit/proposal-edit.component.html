@@ -8,12 +8,17 @@
     </div>
     <div class="col-md-5"></div>
     <div class="col-md-1">
-      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+      <button class="btn btn-light" (click)="goBack()">Voltar</button>
     </div>
   </div>
 </div>
 
-<form #proposalForm="ngForm" (ngSubmit)="updateProposal(proposalForm)">
+<div *ngIf="!canEdit()" class="alert alert-warning">
+  Não pode ser editada pois já se encontra aprovada ou em análise.
+</div>
+
+<div *ngIf="canEdit()">
+  <form #proposalForm="ngForm" (ngSubmit)="updateProposal(proposalForm)">
 
   <div class="form-group">
     <label for="name">Nome</label>
@@ -90,3 +95,4 @@
   <button type="submit" class="btn btn-success" [disabled]="!proposalForm.form.valid">Salvar</button>
   <button type="button" (click)="cancel()" class="btn light">Cancelar</button>
 </form>
+</div>

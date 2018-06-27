@@ -49,6 +49,25 @@ export class SuplierService {
     );
   }
 
+  removeSuplier(id: number): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const url = `${this.supliersUrl}/${id}`;
+    return this.http.delete<any>(url, {headers: this.headers}).pipe(
+      tap(
+        data => {
+          this.log(`deleted suplier id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>(`removeSuplier id=${id}`))
+    );
+  }
+
   getSuplier(id: number): Observable<Suplier> {
     this.loadingService.setLoading(true);
     this.httpError = false;

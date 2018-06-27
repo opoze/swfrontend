@@ -9,7 +9,6 @@ import { ProposalService }  from '../proposal.service';
 import { CategoryService }  from '../category.service';
 import { NgForm } from '@angular/forms';
 
-
 @Component({
   selector: 'app-proposal-edit',
   templateUrl: './proposal-edit.component.html',
@@ -42,6 +41,14 @@ export class ProposalEditComponent implements OnInit {
           this.getProposal();
         }
       });
+  }
+
+  canEdit(): boolean {
+    let can = true;
+    if(this.model.status){
+      return !(this.model.status.status == 'A' || this.model.status.status == 'PD');
+    }
+    return can;
   }
 
   getProposal(): void {

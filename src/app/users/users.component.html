@@ -30,9 +30,9 @@
             <tr>
               <th width="20%">Nome</th>
               <th width="20%">CPF</th>
-              <th width="20%">Data de nascimento</th>
-              <th width="20%">Perfil</th>
-              <th width="20%">Opções</th>
+              <th width="15%">Data de nascimento</th>
+              <th width="15%">Perfil</th>
+              <th width="30%">Opções</th>
             </tr>
           </thead>
           <tbody>
@@ -47,6 +47,9 @@
                 </button>
                 <button type="button" name="button" routerLink="/user/{{user.id}}/edit" class="btn btn-primary">
                   Editar
+                </button>
+                <button [hidden]="user.name=='admin' || authService.name==user.name" type="button" name="button" (click)="remove(user.id)" class="btn btn-danger">
+                  Remover
                 </button>
               </td>
             </tr>

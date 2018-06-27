@@ -44,6 +44,9 @@
                 <button type="button" name="button" routerLink="/category/{{category.id}}/edit" class="btn btn-primary">
                   Editar
                 </button>
+                <button type="button" name="button" (click)="remove(category.id)" class="btn btn-danger">
+                  Remover
+                </button>
               </td>
             </tr>
           </tbody>

@@ -4,4 +4,6 @@ export class User {
   cpf: string;
   birth_date: string;
   perfil: string;
+  password: string;
+  email: string;
 }

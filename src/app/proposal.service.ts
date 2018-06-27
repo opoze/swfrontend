@@ -58,6 +58,25 @@ export class ProposalService {
     );
   }
 
+  removeProposal(id: number): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const url = `${this.proposalsUrl}/${id}`;
+    return this.http.delete<any>(url, {headers: this.headers}).pipe(
+      tap(
+        data => {
+          this.log(`deleted proposal id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>(`removeProposal id=${id}`))
+    );
+  }
+
   getProposal(id: number): Observable<Proposal> {
     this.loadingService.setLoading(true);
     this.httpError = false;
@@ -308,10 +327,39 @@ export class ProposalService {
     );
   }
 
-  findProposalByName(): Observable<Proposal[]> {
+  findProposalByString(): Observable<Proposal[]> {
     this.loadingService.setLoading(true);
     const url = `${this.findUrl}/`;
-    const searchBox = document.getElementById('search_box');
+    const searchBox = document.getElementById('search_box1');
+    return fromEvent(searchBox, 'input').pipe(
+      map((e: any) => e.target.value),
+      filter(text => text.length > 0),
+      debounceTime(500),
+      distinctUntilChanged(),
+      // switchMap((term) => ajax(url+term)),
+      switchMap(
+        (term) => this.http.get<Proposal[]>(url+term, {headers: this.headers}).pipe(
+          tap(
+            data => {
+              this.log(`fetched proposals`);
+              this.loadingProposalsError = false;
+              this.loadingService.setLoading(false);
+            },
+            error => {
+              this.loadingProposalsError = true;
+              this.loadingService.setLoading(false);
+            }
+          ),
+          catchError(this.handleError<any>('Pesquisar proposta'))
+        )
+      )
+    )
+  }
+
+  findProposalByDate(): Observable<Proposal[]> {
+    this.loadingService.setLoading(true);
+    const url = `${this.findUrl}/`;
+    const searchBox = document.getElementById('search_box2');
     return fromEvent(searchBox, 'input').pipe(
       map((e: any) => e.target.value),
       filter(text => text.length > 0),

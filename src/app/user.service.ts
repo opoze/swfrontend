@@ -74,6 +74,25 @@ export class UserService {
     );
   }
 
+  removeUser(id: number): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const url = `${this.usersUrl}/${id}`;
+    return this.http.delete<any>(url, {headers: this.headers}).pipe(
+      tap(
+        data => {
+          this.log(`deleted user id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<User>(`removeUser id=${id}`))
+    );
+  }
+
   updateUser (user: User): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;

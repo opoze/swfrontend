@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../category';
 import { CategoryService } from '../category.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-categories',
@@ -15,7 +16,8 @@ export class CategoriesComponent implements OnInit {
   search: string;
 
   constructor(
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,10 @@ export class CategoriesComponent implements OnInit {
     if(term.length == 0){
       this.getCategories();
     }
+  }
+
+  remove(id: number): void {
+    this.categoryService.removeCategory(id).subscribe();
   }
 
 }

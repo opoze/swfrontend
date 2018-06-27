@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { AuthService } from './auth.service';
+import { LoadingService } from './loading.service';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +9,18 @@ import { AuthService } from './auth.service';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'SafeWeb Test';
 
   constructor(
     private location: Location,
-    private authService: AuthService
+    private authService: AuthService,
+    private loadingService: LoadingService
   ) {}
+
+  ngOnInit() {
+    this.authService.getCookies();
+  }
 
   isUsersRouteActive(){
     var viewLocation = location.pathname;
@@ -37,24 +43,18 @@ export class AppComponent {
           ) ? 'active nav-link' : 'nav-link';
   }
 
-  // isProposalsRouteActive(){
-  //   var viewLocation = location.pathname;
-  //   return (
-  //           viewLocation == '/proposals' ||
-  //           viewLocation.toString().match(/^(\/proposal)\/[\W\w]+/i) ||
-  //           viewLocation.toString().match(/^(\/proposal\/)[\W\w]+\/edit/i) ||
-  //           viewLocation == '/proposalcreate'
-  //         ) ? 'active nav-link' : 'nav-link';
-  // }
-
   isCategoriesRouteActive(){
     var viewLocation = location.pathname;
     return (
             viewLocation == '/categories' ||
-            viewLocation.toString().match(/^(\/categorie)\/[\W\w]+/i) ||
-            viewLocation.toString().match(/^(\/categorie\/)[\W\w]+\/edit/i) ||
+            viewLocation.toString().match(/^(\/category)\/[\W\w]+/i) ||
+            viewLocation.toString().match(/^(\/category\/)[\W\w]+\/edit/i) ||
             viewLocation == '/categoriecreate'
           ) ? 'active nav-link' : 'nav-link';
+  }
+
+  logout() {
+    this.authService.logout();
   }
 
 }

@@ -5,20 +5,24 @@
         <h4>Detralhes da proposta</h4>
       </div>
       <div class="col-md-6 text-right">
-        <button class="btn btn-link" (click)="goBack()">Voltar</button>
+        <button class="btn btn-light" (click)="goBack()">Voltar</button>
       </div>
     </div>
   </div>
 
-
-<div *ngIf="proposal">
+<div *ngIf="proposal" style="padding-bottom:20px;">
 
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
-        <div class="card-header">
-          Proposta: {{proposal.name}}
-          Validade: {{proposaltime}}
+        <div *ngIf="!expired" class="card-header warning">
+          Proposta: {{proposal.name}},
+          Validade: {{proposaltime}}h
+        </div>
+        <div *ngIf="expired "class="card-header danger">
+          Proposta: {{proposal.name}},
+          Validade: {{proposaltime}}h
+          <span class="badge badge-danger">Expirada</span>
         </div>
         <div class="card-body">
           <div class="row">

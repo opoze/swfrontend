@@ -3,7 +3,7 @@ import { Proposal } from '../proposal';
 import { Suplier } from '../suplier';
 import { ProposalService } from '../proposal.service';
 import { SuplierService } from '../suplier.service';
-
+import { AuthService } from '../auth.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -17,7 +17,8 @@ export class ProposalsComponent implements OnInit {
 
   proposals: Proposal[];
   loading: boolean;
-  search: string;
+  search1: string;
+  search2: string;
   suplierName: string = '';
   proposaltime: number = 0;
   suplier: Suplier = null;
@@ -26,16 +27,24 @@ export class ProposalsComponent implements OnInit {
     private proposalService: ProposalService,
     private suplierService: SuplierService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.proposals = [];
-    this.search = '';
+    this.search1 = '';
+    this.search2 = '';
     this.getProposals();
 
     // Find KeyUp
-    this.proposalService.findProposalByName().subscribe((data)=>{
+    this.proposalService.findProposalByString().subscribe((data)=>{
+      if(!this.proposalService.loadingProposalsError){
+        this.proposals = data;
+      }
+    });
+
+    this.proposalService.findProposalByDate().subscribe((data)=>{
       if(!this.proposalService.loadingProposalsError){
         this.proposals = data;
       }
@@ -68,12 +77,9 @@ export class ProposalsComponent implements OnInit {
       });
   }
 
-  // onChangeSearch(term) {
-  //   const id = +this.route.snapshot.paramMap.get('id');
-  //   if(term.length == 0){
-  //     this.getProposals(id);
-  //   }
-  // }
+  remove(id: number): void {
+    this.proposalService.removeProposal(id).subscribe();
+  }
 
   cancel(): void{
     this.goBack();
@@ -83,4 +89,15 @@ export class ProposalsComponent implements OnInit {
     this.location.back();
   }
 
+  onChangeSearch1(term) {
+    if(term.length == 0){
+      this.getProposals();
+    }
+  }
+
+  onChangeSearch2(term) {
+    if(term.length == 0){
+      this.getProposals();
+    }
+  }
 }

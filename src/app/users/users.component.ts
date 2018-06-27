@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { User } from '../user';
 import { UserService } from '../user.service';
-
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.css']
 })
-
 
 export class UsersComponent implements OnInit {
 
@@ -17,7 +16,8 @@ export class UsersComponent implements OnInit {
   search: string;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -44,6 +44,10 @@ export class UsersComponent implements OnInit {
     if(term.length == 0){
       this.getUsers();
     }
+  }
+
+  remove(id: number): void {
+    this.userService.removeUser(id).subscribe();
   }
 
 }

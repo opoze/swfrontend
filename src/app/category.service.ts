@@ -68,6 +68,25 @@ export class CategoryService {
     );
   }
 
+  removeCategory(id: number): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const url = `${this.categoriesUrl}/${id}`;
+    return this.http.delete<any>(url, {headers: this.headers}).pipe(
+      tap(
+        data => {
+          this.log(`deleted category id=${id}`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError<any>(`removeCategory id=${id}`))
+    );
+  }
+
   updateCategory (category: Category): Observable<any> {
     this.loadingService.setLoading(true);
     this.httpError = false;

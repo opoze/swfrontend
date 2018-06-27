@@ -1,14 +1,17 @@
 <div class="container" >
     <div class="panel panel-default" style="width:400px; margin:auto;">
 
-      <div class="panel-heading">
+
+      <div class="panel-heading text-center">
 	    	<h3 class="panel-title">LOGIN</h3>
 	 	  </div>
 
       <div class="panel-body">
+        <div *ngIf="authService.httpError" class="alert alert-danger" role="alert">
+          Usuário ou senha inválido
+        </div>
 
         <form #loginForm="ngForm" (ngSubmit)="doLogin(loginForm)">
-
           <fieldset>
 	    	  	<div class="form-group">
 	    		    <input required [(ngModel)]="login" class="form-control" placeholder="E-mail" name="email" type="text">

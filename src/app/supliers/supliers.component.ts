@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Suplier } from '../suplier';
 import { SuplierService } from '../suplier.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-supliers',
@@ -14,7 +15,8 @@ export class SupliersComponent implements OnInit {
   search: string;
 
   constructor(
-    private suplierService: SuplierService
+    private suplierService: SuplierService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -43,5 +45,8 @@ export class SupliersComponent implements OnInit {
     }
   }
 
+  remove(id: number): void {
+    this.suplierService.removeSuplier(id).subscribe();
+  }
 
 }

@@ -11,15 +11,84 @@ import { LoadingService } from './loading.service'
 export class AuthService {
 
   private loginUrl = 'http://127.0.0.1:8000/login';
+  private logoutUrl = 'http://127.0.0.1:8000/logout';
+  public httpError = false;
+
   public token: string = '';
   public name: string = '';
-  public httpError = false;
+  public perfil: string = '';
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
     private loadingService: LoadingService
   ) { }
+
+  setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+
+  getCookies() {
+    this.token = this.getCookie('token');
+    this.name = this.getCookie('name');
+    this.perfil = this.getCookie('perfil');
+  }
+
+  getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) {
+          return c.substring(nameEQ.length,c.length);
+        }
+    }
+    return '';
+  }
+
+  eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
+  }
+
+  logout() {
+    this.token = '';
+    this.name = '';
+    this.perfil = '';
+    this.eraseCookie('token');
+    this.eraseCookie('name');
+    this.eraseCookie('perfil');
+    return;
+  }
+
+  logoutApi(): Observable<any> {
+    this.loadingService.setLoading(true);
+    this.httpError = false;
+    const headers: HttpHeaders = new HttpHeaders()
+      .set('Content-Type', 'application/json')
+      .set('Authorization', this.token);
+
+    return this.http.get<any>(this.logoutUrl, {headers: headers})
+    .pipe(
+      tap(
+        data => {
+          this.log(`logged out`);
+          this.loadingService.setLoading(false);
+        },
+        error => {
+          this.httpError = true;
+          this.loadingService.setLoading(false);
+        }
+      ),
+      catchError(this.handleError('Logout', []))
+    );
+  }
 
   login(login: string, password: string): Observable<any>{
     this.loadingService.setLoading(true);
@@ -31,9 +100,12 @@ export class AuthService {
         data => {
           this.log(`fetched login`);
           this.loadingService.setLoading(false);
-
-          this.name = data.name;
+          this.setCookie('token', data.token, 1);
+          this.setCookie('name', data.name, 1);
+          this.setCookie('perfil', data.perfil, 1);
           this.token = data.token;
+          this.name = data.name;
+          this.perfil = data.perfil;
         },
         error => {
           this.httpError = true;

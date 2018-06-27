@@ -29,11 +29,11 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th width="18%">Nome</th>
-              <th width="18%">CPF/CNPJ</th>
-              <th width="18%">Fone</th>
-              <th width="18%">E-mail</th>
-              <th width="28%">Opções</th>
+              <th width="15%">Nome</th>
+              <th width="15%">CPF/CNPJ</th>
+              <th width="15%">Fone</th>
+              <th width="15%">E-mail</th>
+              <th width="40%">Opções</th>
             </tr>
           </thead>
           <tbody>
@@ -52,6 +52,9 @@
                 </button>
                 <button type="button" name="button" routerLink="/suplier/{{suplier.id}}/edit" class="btn btn-primary">
                   Editar
+                </button>
+                <button type="button" name="button" (click)="remove(suplier.id)" class="btn btn-danger">
+                  Remover
                 </button>
               </td>
             </tr>

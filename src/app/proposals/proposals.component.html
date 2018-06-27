@@ -1,25 +1,18 @@
 <div class="container">
 
   <div class="row" style="margin:20px">
-    <div class="col-md-5">
+
+    <div class="col-md-10">
       <div *ngIf="suplier">
         <h4>Propostas do fornecedor: {{suplier.name}}</h4>
       </div>
+
       <div *ngIf="proposaltime">
         <h6>Validade {{proposaltime}} horas</h6>
         <button type="button" name="button" routerLink="/proposaltime" class="btn btn-primary">
           Alterar
         </button>
       </div>
-    </div>
-    <div class="col-md-5">
-      <input
-      id = "search_box"
-      class="form-control"
-      placeholder="Pesquisar..."
-      [(ngModel)]="search"
-      (ngModelChange)="onChangeSearch($event)"
-      >
     </div>
 
     <div class="cold-md-1">
@@ -28,10 +21,35 @@
       </button>
     </div>
     <div class="col-md-1">
-      <button class="btn btn-link" (click)="goBack()">Voltar</button>
+      <button class="btn btn-light" (click)="goBack()">Voltar</button>
     </div>
 
   </div>
+
+
+  <div class="row" style="margin:20px;">
+    <div class="col-md-6">
+      <input
+      id = "search_box1"
+      class="form-control"
+      placeholder="Pesquisar: Nome, Fornecedor, Categoria, Status..."
+      [(ngModel)]="search1"
+      (ngModelChange)="onChangeSearch1($event)"
+      >
+    </div>
+
+    <div class="col-md-6">
+      <input
+      id = "search_box2"
+      class="form-control"
+      placeholder="Pesquisar: data..."
+      [(ngModel)]="search2"
+      (ngModelChange)="onChangeSearch2($event)"
+      >
+    </div>
+
+  </div>
+
 
   <div class="row">
     <div class="col">
@@ -59,6 +77,9 @@
                 <div *ngIf="suplier">
                   <button type="button" name="button" routerLink="/suplier/{{suplier.id}}/proposal/{{proposal.id}}" class="btn btn-primary">
                     Ver
+                  </button>
+                  <button type="button" name="button" (click)="remove(proposal.id)" class="btn btn-danger">
+                    Remover
                   </button>
                 </div>
               </td>

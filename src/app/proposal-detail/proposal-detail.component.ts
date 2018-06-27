@@ -7,7 +7,7 @@ import { Status } from '../status';
 import { ProposalService }  from '../proposal.service';
 import { SuplierService }  from '../suplier.service';
 import { ViewChild } from '@angular/core';
-
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-proposal-detail',
@@ -25,6 +25,7 @@ export class ProposalDetailComponent implements OnInit {
   proposalStatusHistory : Status[] = [];
   suplier : Suplier = null;
   showFileUpload: boolean = false;
+  expired: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +42,24 @@ export class ProposalDetailComponent implements OnInit {
     this.proposalService.getProposalTime()
       .subscribe(proposaltime => {
         this.proposaltime = proposaltime.proposaltime;
+
+        let now = moment();
+        let data = moment(this.proposal.created_at);
+        let limit = data.add(this.proposaltime, 'hours');
+
+        if(this.proposal){
+          if(this.proposal.status){
+            this.expired = (limit.diff(now) < 0 && this.proposal.status.status != 'A');
+          }
+          else{
+            this.expired = (limit.diff(now) < 0);
+              console.log(limit.diff(now, 'days'));
+          }
+        }
+        else{
+          this.expired = (limit.diff(now) < 0);
+        }
+
     });
   }
 
@@ -80,7 +99,6 @@ export class ProposalDetailComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id1');
     this.proposalService.approveProposal(id)
       .subscribe(proposalStatusHistory => {
-        console.log(proposalStatusHistory);
         if(proposalStatusHistory.length > 0){
           this.setProposalStatus(proposalStatusHistory[0]);
         }
@@ -123,6 +141,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   canNotApprove(){
+    if(this.expired) {return true;}
     if(this.proposal){
       if(this.proposal.status){
         return this.proposal.status.status == 'A';
@@ -132,6 +151,7 @@ export class ProposalDetailComponent implements OnInit {
   }
 
   canNotReprove(){
+    if(this.expired) {return true;}
     if(this.proposal){
       if(this.proposal.status){
         return this.proposal.status.status == 'R';
